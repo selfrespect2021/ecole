@@ -33,8 +33,9 @@
         .footer { margin-top: 40px; font-size: 0.95em; color: #555; border-top: 2px solid #eee; padding-top: 20px; font-weight: 500; }
         .hidden { display: none !important; }
         .loading { color: #3498db; font-weight: bold; margin: 20px 0; }
-        .success { color: #27ae60; font-weight: bold; margin: 15px 0; }
-        .error { color: #e74c3c; font-weight: bold; margin: 15px 0; }
+        .success { color: #27ae60; font-weight: bold; margin: 15px 0; padding: 15px; background: #d4edda; border-radius: 10px; }
+        .error { color: #e74c3c; font-weight: bold; margin: 15px 0; padding: 15px; background: #f8d7da; border-radius: 10px; }
+        .info { color: #0066cc; background: #e7f3ff; padding: 15px; border-radius: 10px; margin: 15px 0; }
     </style>
 </head>
 <body>
@@ -65,7 +66,7 @@
 
     <div id="searchBox" class="hidden">
         <p>أدخل الرمز السري للمتعلم (مثلاً: G123456789)</p>
-        <input type="text" id="studentID" placeholder="أدخل الرمز هنا...">
+        <input type="text" id="studentID" placeholder="أدخل الرمز هنا..." onkeypress="if(event.key==='Enter') searchStudent()">
         <br>
         <button onclick="searchStudent()">عرض كشف النقاط</button>
     </div>
@@ -78,11 +79,32 @@
 </div>
 
 <script>
-    const ADMIN_PASSWORD = "belgani2025"; // يمكنك تغيير كلمة المرور هنا
+    const ADMIN_PASSWORD = "belgani2025";
     const DB_KEY = "belgani_students_data";
     let isAdmin = false;
+    let storageAvailable = false;
+
+    // فحص توفر التخزين
+    async function checkStorage() {
+        try {
+            if (typeof window.storage !== 'undefined') {
+                // محاولة عملية اختبارية
+                await window.storage.set('test_key', 'test', true);
+                await window.storage.delete('test_key', true);
+                storageAvailable = true;
+                return true;
+            }
+        } catch (error) {
+            console.log("التخزين الدائم غير متاح:", error);
+        }
+        storageAvailable = false;
+        return false;
+    }
 
     async function loadDatabase() {
+        if (!storageAvailable) {
+            return null;
+        }
         try {
             const result = await window.storage.get(DB_KEY, true);
             if (result && result.value) {
@@ -95,9 +117,12 @@
     }
 
     async function saveDatabase(data) {
+        if (!storageAvailable) {
+            return false;
+        }
         try {
-            await window.storage.set(DB_KEY, JSON.stringify(data), true);
-            return true;
+            const result = await window.storage.set(DB_KEY, JSON.stringify(data), true);
+            return result !== null;
         } catch (error) {
             console.error("خطأ في حفظ البيانات:", error);
             return false;
@@ -105,11 +130,19 @@
     }
 
     window.onload = async function() {
-        const data = await loadDatabase();
-        if (data) {
-            document.getElementById('searchBox').classList.remove('hidden');
+        await checkStorage();
+        
+        if (storageAvailable) {
+            const data = await loadDatabase();
+            if (data && Object.keys(data).length > 0) {
+                document.getElementById('searchBox').classList.remove('hidden');
+                document.getElementById('output').innerHTML = '<p class="info">✨ مرحباً! أدخل رمزك السري للاستعلام عن نتائجك</p>';
+            } else {
+                document.getElementById('output').innerHTML = '<p class="loading">⚠️ لم يتم رفع بيانات الطلاب بعد. يرجى الاتصال بالأستاذ.</p>';
+            }
         } else {
-            document.getElementById('output').innerHTML = '<p class="loading">⚠️ لم يتم رفع بيانات الطلاب بعد. يرجى الاتصال بالأستاذ.</p>';
+            document.getElementById('output').innerHTML = '<p class="error">⚠️ التخزين الدائم غير متاح في هذه البيئة. سيتم استخدام التخزين المؤقت.</p>';
+            document.getElementById('searchBox').classList.remove('hidden');
         }
     };
 
@@ -126,6 +159,10 @@
             document.getElementById('adminPanel').classList.add('hidden');
             document.getElementById('uploadArea').classList.remove('hidden');
             document.getElementById('searchBox').classList.add('hidden');
+            
+            if (!storageAvailable) {
+                document.getElementById('uploadStatus').innerHTML = '<p class="error">⚠️ تحذير: التخزين الدائم غير متاح. البيانات ستُحفظ مؤقتاً فقط.</p>';
+            }
         } else {
             alert("❌ كلمة المرور غير صحيحة!");
         }
@@ -151,7 +188,8 @@
                 const range = XLSX.utils.sheet_to_json(sheet, {header: 1, raw: true, defval: ""});
                 processData(range);
             } catch (error) {
-                statusDiv.innerHTML = '<p class="error">❌ خطأ في قراءة الملف!</p>';
+                statusDiv.innerHTML = '<p class="error">❌ خطأ في قراءة الملف! تأكد من صحة الملف.</p>';
+                console.error(error);
             }
         };
         reader.readAsArrayBuffer(e.target.files[0]);
@@ -162,46 +200,65 @@
         const startCol = 4;
         const endCol = 73;
         let tempDB = {};
+        let studentCount = 0;
 
-        for (let c = startCol; c <= endCol; c++) {
-            let id = data[7] ? String(data[7][c]).trim().toUpperCase() : "";
-            let name = data[10] ? String(data[10][c]).trim() : "";
+        try {
+            for (let c = startCol; c <= endCol; c++) {
+                let id = data[7] ? String(data[7][c]).trim().toUpperCase() : "";
+                let name = data[10] ? String(data[10][c]).trim() : "";
 
-            if (id && id !== "" && id !== "UNDEFINED") {
-                let studentGrades = [];
-                for (let r = 11; r <= 24; r++) {
-                    let subjectName = data[r][3] || "مادة";
-                    let score = data[r][c];
+                if (id && id !== "" && id !== "UNDEFINED") {
+                    let studentGrades = [];
+                    for (let r = 11; r <= 24; r++) {
+                        let subjectName = data[r][3] || "مادة";
+                        let score = data[r][c];
+                        
+                        let finalScore = (score !== "" && score !== undefined && score !== null) ? String(score).replace(',', '.') : "--";
+                        
+                        studentGrades.push({ subject: subjectName, score: finalScore });
+                    }
                     
-                    let finalScore = (score !== "" && score !== undefined && score !== null) ? String(score).replace(',', '.') : "--";
-                    
-                    studentGrades.push({ subject: subjectName, score: finalScore });
+                    let rawAvg = data[25][c];
+                    let finalAvg = (rawAvg !== "" && rawAvg !== undefined) ? parseFloat(String(rawAvg).replace(',', '.')) : NaN;
+                    let formattedAvg = isNaN(finalAvg) ? "--" : finalAvg.toFixed(2);
+
+                    tempDB[id] = { name: name, grades: studentGrades, average: formattedAvg };
+                    studentCount++;
                 }
-                
-                let rawAvg = data[25][c];
-                let finalAvg = (rawAvg !== "" && rawAvg !== undefined) ? parseFloat(String(rawAvg).replace(',', '.')) : NaN;
-                let formattedAvg = isNaN(finalAvg) ? "--" : finalAvg.toFixed(2);
-
-                tempDB[id] = { name: name, grades: studentGrades, average: formattedAvg };
             }
-        }
 
-        const saved = await saveDatabase(tempDB);
-        if (saved) {
-            statusDiv.innerHTML = '<p class="success">✅ تم تحديث البيانات بنجاح! عدد الطلاب: ' + Object.keys(tempDB).length + '</p>';
-        } else {
-            statusDiv.innerHTML = '<p class="error">❌ فشل حفظ البيانات!</p>';
+            if (studentCount === 0) {
+                statusDiv.innerHTML = '<p class="error">❌ لم يتم العثور على أي بيانات طلاب في الملف!</p>';
+                return;
+            }
+
+            const saved = await saveDatabase(tempDB);
+            if (saved || !storageAvailable) {
+                statusDiv.innerHTML = `<p class="success">✅ تم تحديث البيانات بنجاح!<br>عدد الطلاب: ${studentCount}</p>`;
+                
+                if (!storageAvailable) {
+                    statusDiv.innerHTML += '<p class="error">⚠️ ملاحظة: البيانات محفوظة مؤقتاً فقط (ستُحذف عند إعادة تحميل الصفحة)</p>';
+                }
+            } else {
+                statusDiv.innerHTML = '<p class="error">❌ فشل حفظ البيانات في التخزين الدائم!</p>';
+            }
+        } catch (error) {
+            statusDiv.innerHTML = '<p class="error">❌ خطأ في معالجة البيانات!</p>';
+            console.error(error);
         }
     }
 
     async function clearDatabase() {
         if (confirm("⚠️ هل أنت متأكد من حذف جميع البيانات؟")) {
             try {
-                await window.storage.delete(DB_KEY, true);
+                if (storageAvailable) {
+                    await window.storage.delete(DB_KEY, true);
+                }
                 alert("✅ تم مسح جميع البيانات بنجاح!");
                 location.reload();
             } catch (error) {
                 alert("❌ فشل مسح البيانات!");
+                console.error(error);
             }
         }
     }
@@ -227,8 +284,8 @@
         
         const database = await loadDatabase();
         
-        if (!database) {
-            output.innerHTML = '<p class="error">❌ لا توجد بيانات متاحة حالياً!</p>';
+        if (!database || Object.keys(database).length === 0) {
+            output.innerHTML = '<p class="error">❌ لا توجد بيانات متاحة حالياً! يرجى الاتصال بالأستاذ.</p>';
             return;
         }
 
@@ -245,7 +302,7 @@
             if (advice) html += `<div class="advice-box ${advice.class}">${advice.text}</div>`;
             output.innerHTML = html;
         } else {
-            output.innerHTML = `<p class="error">❌ الرمز السري غير صحيح أو غير موجود.</p>`;
+            output.innerHTML = `<p class="error">❌ الرمز السري غير صحيح أو غير موجود.<br>تأكد من كتابة الرمز بشكل صحيح.</p>`;
         }
     }
 </script>
