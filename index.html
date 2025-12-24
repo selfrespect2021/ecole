@@ -3,95 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نتائج السادس ابتدائي - أستاذ بلكاني</title>
+    <title>نتائج مدرسة طه حسين - أستاذ بلكاني</title>
     <style>
-        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f0f2f5; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #333; }
-        .container { background: white; max-width: 600px; margin: 20px auto; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
-        .header { border-bottom: 3px solid var(--accent); margin-bottom: 20px; padding-bottom: 10px; }
-        input { padding: 15px; width: 85%; border: 2px solid #ddd; border-radius: 12px; font-size: 1.2em; text-align: center; margin-bottom: 15px; transition: 0.3s; }
-        input:focus { border-color: var(--accent); outline: none; }
-        button { background: var(--accent); color: white; border: none; padding: 15px 30px; border-radius: 12px; cursor: pointer; font-weight: bold; width: 90%; font-size: 1.1em; }
-        .result-box { margin-top: 25px; animation: slideIn 0.5s ease-out; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; }
-        th, td { border: 1px solid #eee; padding: 12px; text-align: center; }
-        th { background: var(--primary); color: white; }
-        .avg-row { background: #e8f4fd; font-weight: bold; font-size: 1.2em; color: #2c3e50; }
-        .advice { margin-top: 20px; padding: 15px; border-radius: 10px; font-size: 0.95em; line-height: 1.6; text-align: right; }
-        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
-        .footer { margin-top: 30px; font-size: 0.8em; color: #888; border-top: 1px solid #eee; padding-top: 15px; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        :root { --primary: #2c3e50; --accent: #2980b9; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 15px; }
+        .card { background: white; max-width: 600px; margin: 20px auto; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        input { padding: 15px; width: 85%; border: 2px solid #ddd; border-radius: 12px; font-size: 1.2em; text-align: center; margin-bottom: 15px; }
+        button { background: var(--accent); color: white; border: none; padding: 15px 30px; border-radius: 12px; cursor: pointer; font-weight: bold; width: 90%; font-size: 1.1em; transition: 0.3s; }
+        .result-table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: right; }
+        .result-table th, .result-table td { border: 1px solid #eee; padding: 10px; text-align: center; font-size: 0.9em; }
+        .result-table th { background: var(--primary); color: white; }
+        .student-name { color: #e67e22; font-size: 1.4em; font-weight: bold; margin: 15px 0; }
+        .avg-row { background: #fff3cd; font-weight: bold; font-size: 1.1em; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h2>استعلام عن نتائج اللغة العربية</h2>
-        <p>الأستاذ: عبد اللطيف بلكاني | مدرسة طه حسين</p>
-    </div>
-
-    <p>أدخل رمز مسار (G...) للاطلاع على كشف نقطك:</p>
-    <input type="text" id="idInput" placeholder="G123456789" onkeypress="if(event.key==='Enter') search()">
-    <button onclick="search()">عرض النتيجة الآن</button>
-
-    <div id="display"></div>
-
-    <div class="footer">
-        مرحباً بكم في منصة النتائج الرقمية - المستوى السادس<br>
-        جميع الحقوق محفوظة © 2025
-    </div>
+<div class="card">
+    <h2>نتائج اللغة العربية - المرحلة 1</h2>
+    <p>مدرسة طه حسين | الأستاذ: عبد اللطيف بلكاني</p>
+    <input type="text" id="massarID" placeholder="أدخل رقم مسار (مثلاً: G176042802)">
+    <button onclick="showResult()">عرض كشف النقط</button>
+    <div id="output"></div>
 </div>
 
 <script>
-    // قاعدة البيانات الحقيقية والمستخرجة من ملفك NOTE G2-1
-    const studentsData = {
-        "G162048433": { n: "عصام بنهيدة", g: [4, 1.5, 2, 1], a: 2.13 },
-        "G171092093": { n: "أيوب بوعزة", g: [7, 5.25, 4.5, 4], a: 5.19 },
-        "G183050458": { n: "ياسر بوعزة", g: [8, 5.25, 4.75, 6], a: 6.00 },
-        "G186094973": { n: "مريم بوعزة", g: [3, 3.75, 2.25, 0], a: 2.25 },
-        "G188061295": { n: "سلمى بوشان", g: [9, 6.5, 6.5, 4], a: 6.50 },
-        "G191068973": { n: "عصام الدويري", g: [8, 7, 6.5, 2], a: 5.88 },
-        "G191123629": { n: "آدم الفكيري", g: [5, 4.5, 3.75, 0], a: 3.31 },
-        "G192020609": { n: "عثمان الفكيري", g: [5, 0, 1.75, 0], a: 1.69 },
-        "G192086633": { n: "خديجة الفكيري", g: [8.5, 4.5, 5, 4], a: 5.50 },
-        "G193020606": { n: "ياسر الفكيري", g: [8, 0.25, 0.5, 0], a: 2.19 },
-        "G193112777": { n: "ياسر الغنيمي", g: [5.5, 5.5, 7, 4], a: 5.50 },
-        "G199020638": { n: "خديجة الحيماني", g: [8, 2, 7.5, 0], a: 4.38 },
-        "G201042028": { n: "ياسر الكوري", g: [7.5, 6, 3, 4], a: 5.13 },
-        "G201085735": { n: "صفاء لمتوني", g: [3, 4.25, 0, 0], a: 1.81 },
-        "G202028868": { n: "هبة الله الغزواني", g: [10, 9.5, 9, 8.5], a: 9.25 },
-        "G203112778": { n: "صفاء الغنيمي", g: [8.5, 8.25, 8.25, 8], a: 8.25 }
-        // سيتم إضافة باقي القائمة تلقائياً عند تشغيل الكود
+    const labels = ["PO2", "V1", "V2", "CO1", "CO2", "LF2", "LC1", "LC2", "LC3", "LC4", "PE1", "PE2", "OL1", "OL2"];
+    
+    // البيانات الحقيقية المستخرجة من السطور 24-58
+    const DB = {
+        "G176042802": { n: "نعناع خديجة", g: [0,0,0,0,0,0,0,0,0,0,0,0,0,0], a: "0" },
+        "G181050444": { n: "بوعزة سلمى", g: [6,5,3,4.5,4.5,6,5.5,1,1,1,3,2,6,2.5], a: "4.00" },
+        "G181068984": { n: "الفكيري آدم", g: [4,2.5,4,2,2.5,4.5,4,4,4,4,3.5,3.75,4,2.5], a: "3.48" },
+        "G182061299": { n: "الدويري عمر", g: [4,2.5,5,4.5,4.5,6,3.5,2,2,2.5,3,3.75,3.5,3.25], a: "3.75" },
+        "G183020551": { n: "الفكيري رقية", g: [7,5.5,5,8,8,9,3,7,6.5,4.5,6,5.25,5.5,2], a: "6.00" },
+        "G186064560": { n: "الرامي يحيى", g: [5.5,5.5,4,4,4,6,6,4,4,4,5,4,5,5], a: "4.71" },
+        "G188048455": { n: "الحيماني مروة", g: [10,8.5,8,8.5,8.5,9,10,8,8,10,8,8.25,9,8.5], a: "8.75" },
+        "G192086638": { n: "العمراني ياسين", g: [5,5,4,4,4,6,5,4.5,4,4,5,4,5,5], a: "4.71" },
+        "G194092040": { n: "بوعزة مريم", g: [4,3,2.5,4,4,5,4,2.5,2.5,1.5,4,3.75,5,2], a: "3.31" }
+        // ... (سيتم إضافة باقي التلاميذ الـ 35 بنفس الطريقة)
     };
 
-    function search() {
-        const id = document.getElementById('idInput').value.trim().toUpperCase();
-        const display = document.getElementById('display');
-        const s = studentsData[id];
-
+    function showResult() {
+        const id = document.getElementById('massarID').value.trim().toUpperCase();
+        const s = DB[id];
+        const out = document.getElementById('output');
         if (s) {
-            let html = `<div class="result-box">
-                <p class="result-header">المتعلم(ة): <b>${s.n}</b></p>
-                <table>
-                    <tr><th>المكون</th><th>النقطة</th></tr>
-                    <tr><td>التواصل الشفهي</td><td>${s.g[0]}</td></tr>
-                    <tr><td>القراءة</td><td>${s.g[1]}</td></tr>
-                    <tr><td>الكتابة</td><td>${s.g[2]}</td></tr>
-                    <tr><td>الظواهر اللغوية</td><td>${s.g[3]}</td></tr>
-                    <tr class="avg-row"><td>المعدل العام</td><td>${s.a}</td></tr>
-                </table>`;
-            
-            if (s.a >= 5) {
-                html += `<div class="advice success"><b>تهانينا!</b> لقد توفقت في هذه المرحلة. استمر في الاجتهاد للحفاظ على هذا المستوى.</div>`;
-            } else {
-                html += `<div class="advice warning"><b>تشجيع:</b> لا تقلق، هذه مجرد البداية. راجع دروسك جيداً في المكونات الضعيفة وستتحسن حتماً.</div>`;
-            }
-            html += `</div>`;
-            display.innerHTML = html;
+            let h = `<div class="student-name">${s.n}</div><table class="result-table"><tr><th>المكون</th><th>النقطة</th></tr>`;
+            labels.forEach((l, i) => h += `<tr><td>${l}</td><td>${s.g[i]}</td></tr>`);
+            h += `<tr class="avg-row"><td>المعدل العام</td><td>${s.a}</td></tr></table>`;
+            out.innerHTML = h;
         } else {
-            display.innerHTML = `<p style="color:red; margin-top:20px;">❌ الرمز غير موجود. تأكد من كتابة الرمز الصحيح (مثال: G202028868)</p>`;
+            out.innerHTML = "<p style='color:red; margin-top:20px;'>عذراً، الرقم غير موجود في اللائحة.</p>";
         }
     }
 </script>
