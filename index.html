@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتائج المراقبة المستمرة الأولى - عبد اللطيف بلكاني</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f7f6; text-align: center; padding: 20px; color: #333; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: inline-block; width: 95%; max-width: 800px; position: relative; }
+        h2 { color: #2c3e50; margin-bottom: 25px; border-bottom: 3px solid #3498db; display: inline-block; padding-bottom: 10px; }
+        .admin-btn { position: absolute; top: 20px; left: 20px; background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+        .admin-btn:hover { background: #7f8c8d; }
+        .upload-section { border: 2px dashed #3498db; padding: 20px; margin-bottom: 20px; border-radius: 10px; background: #f0f9ff; }
+        .password-section { margin-bottom: 20px; padding: 15px; background: #fff3cd; border-radius: 10px; }
+        input[type="text"], input[type="password"] { padding: 15px; width: 70%; border: 1px solid #ddd; border-radius: 10px; font-size: 18px; text-align: center; margin-top: 10px; }
+        input[type="file"] { padding: 10px; margin-top: 10px; }
+        button { padding: 15px 30px; background: #3498db; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 15px; transition: background 0.3s; }
+        button:hover { background: #2980b9; }
+        .btn-secondary { background: #95a5a6; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .btn-danger { background: #e74c3c; }
+        .btn-danger:hover { background: #c0392b; }
+        table { width: 100%; border-collapse: collapse; margin-top: 25px; border-radius: 10px; overflow: hidden; }
+        th, td { border: 1px solid #edf2f7; padding: 15px; text-align: center; }
+        th { background-color: #3498db; color: white; }
+        .result-header { margin-top: 20px; padding: 15px; background: #e1effe; border-radius: 10px; color: #1e429f; font-weight: bold; font-size: 1.4em; }
+        .total-row { background-color: #f9fafb; font-size: 1.5em; font-weight: bold; color: #d35400; border-top: 3px solid #3498db; }
+        .advice-box { margin-top: 20px; padding: 20px; border-radius: 12px; text-align: right; line-height: 1.8; font-size: 1.1em; }
+        .excellent { background-color: #def7ec; color: #03543f; border: 1px solid #84e1bc; }
+        .average { background-color: #fdf6b2; color: #723b13; border: 1px solid #fce96a; }
+        .low { background-color: #fde8e8; color: #9b1c1c; border: 1px solid #f8b4b4; }
+        .footer { margin-top: 40px; font-size: 0.95em; color: #555; border-top: 2px solid #eee; padding-top: 20px; font-weight: 500; }
+        .hidden { display: none !important; }
+        .loading { color: #3498db; font-weight: bold; margin: 20px 0; }
+        .success { color: #27ae60; font-weight: bold; margin: 15px 0; }
+        .error { color: #e74c3c; font-weight: bold; margin: 15px 0; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <button class="admin-btn" onclick="toggleAdmin()">🔧 إدارة</button>
+    
+    <h2 id="title">استعلام عن نتائج المراقبة المستمرة الأولى</h2>
+    
+    <div id="adminPanel" class="hidden">
+        <div class="password-section">
+            <p><b>كلمة مرور الإدارة:</b></p>
+            <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور...">
+            <br>
+            <button onclick="verifyAdmin()">دخول</button>
+        </div>
+    </div>
+    
+    <div id="uploadArea" class="upload-section hidden">
+        <p><b>مرحباً أستاذ عبد اللطيف!</b></p>
+        <p>ارفع ملف NOTE G2-2.xlsx المحدث</p>
+        <input type="file" id="excelFile" accept=".xlsx, .xls">
+        <div id="uploadStatus"></div>
+        <br>
+        <button class="btn-danger" onclick="clearDatabase()" style="margin-top: 20px;">🗑️ مسح جميع البيانات</button>
+        <button class="btn-secondary" onclick="logout()">خروج</button>
+    </div>
+
+    <div id="searchBox" class="hidden">
+        <p>أدخل الرمز السري للمتعلم (مثلاً: G123456789)</p>
+        <input type="text" id="studentID" placeholder="أدخل الرمز هنا...">
+        <br>
+        <button onclick="searchStudent()">عرض كشف النقاط</button>
+    </div>
+
+    <div id="output"></div>
+
+    <div class="footer">
+        جميع الحقوق محفوظة - الأستاذ: عبد اللطيف بلكاني © 2025
+    </div>
+</div>
+
+<script>
+    const ADMIN_PASSWORD = "belgani2025"; // يمكنك تغيير كلمة المرور هنا
+    const DB_KEY = "belgani_students_data";
+    let isAdmin = false;
+
+    async function loadDatabase() {
+        try {
+            const result = await window.storage.get(DB_KEY, true);
+            if (result && result.value) {
+                return JSON.parse(result.value);
+            }
+        } catch (error) {
+            console.log("لا توجد بيانات محفوظة");
+        }
+        return null;
+    }
+
+    async function saveDatabase(data) {
+        try {
+            await window.storage.set(DB_KEY, JSON.stringify(data), true);
+            return true;
+        } catch (error) {
+            console.error("خطأ في حفظ البيانات:", error);
+            return false;
+        }
+    }
+
+    window.onload = async function() {
+        const data = await loadDatabase();
+        if (data) {
+            document.getElementById('searchBox').classList.remove('hidden');
+        } else {
+            document.getElementById('output').innerHTML = '<p class="loading">⚠️ لم يتم رفع بيانات الطلاب بعد. يرجى الاتصال بالأستاذ.</p>';
+        }
+    };
+
+    function toggleAdmin() {
+        const panel = document.getElementById('adminPanel');
+        panel.classList.toggle('hidden');
+        document.getElementById('adminPassword').value = '';
+    }
+
+    function verifyAdmin() {
+        const password = document.getElementById('adminPassword').value;
+        if (password === ADMIN_PASSWORD) {
+            isAdmin = true;
+            document.getElementById('adminPanel').classList.add('hidden');
+            document.getElementById('uploadArea').classList.remove('hidden');
+            document.getElementById('searchBox').classList.add('hidden');
+        } else {
+            alert("❌ كلمة المرور غير صحيحة!");
+        }
+    }
+
+    function logout() {
+        isAdmin = false;
+        document.getElementById('uploadArea').classList.add('hidden');
+        document.getElementById('searchBox').classList.remove('hidden');
+        document.getElementById('uploadStatus').innerHTML = '';
+    }
+
+    document.getElementById('excelFile').addEventListener('change', function(e) {
+        const statusDiv = document.getElementById('uploadStatus');
+        statusDiv.innerHTML = '<p class="loading">⏳ جاري معالجة الملف...</p>';
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            try {
+                const data = new Uint8Array(event.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const range = XLSX.utils.sheet_to_json(sheet, {header: 1, raw: true, defval: ""});
+                processData(range);
+            } catch (error) {
+                statusDiv.innerHTML = '<p class="error">❌ خطأ في قراءة الملف!</p>';
+            }
+        };
+        reader.readAsArrayBuffer(e.target.files[0]);
+    });
+
+    async function processData(data) {
+        const statusDiv = document.getElementById('uploadStatus');
+        const startCol = 4;
+        const endCol = 73;
+        let tempDB = {};
+
+        for (let c = startCol; c <= endCol; c++) {
+            let id = data[7] ? String(data[7][c]).trim().toUpperCase() : "";
+            let name = data[10] ? String(data[10][c]).trim() : "";
+
+            if (id && id !== "" && id !== "UNDEFINED") {
+                let studentGrades = [];
+                for (let r = 11; r <= 24; r++) {
+                    let subjectName = data[r][3] || "مادة";
+                    let score = data[r][c];
+                    
+                    let finalScore = (score !== "" && score !== undefined && score !== null) ? String(score).replace(',', '.') : "--";
+                    
+                    studentGrades.push({ subject: subjectName, score: finalScore });
+                }
+                
+                let rawAvg = data[25][c];
+                let finalAvg = (rawAvg !== "" && rawAvg !== undefined) ? parseFloat(String(rawAvg).replace(',', '.')) : NaN;
+                let formattedAvg = isNaN(finalAvg) ? "--" : finalAvg.toFixed(2);
+
+                tempDB[id] = { name: name, grades: studentGrades, average: formattedAvg };
+            }
+        }
+
+        const saved = await saveDatabase(tempDB);
+        if (saved) {
+            statusDiv.innerHTML = '<p class="success">✅ تم تحديث البيانات بنجاح! عدد الطلاب: ' + Object.keys(tempDB).length + '</p>';
+        } else {
+            statusDiv.innerHTML = '<p class="error">❌ فشل حفظ البيانات!</p>';
+        }
+    }
+
+    async function clearDatabase() {
+        if (confirm("⚠️ هل أنت متأكد من حذف جميع البيانات؟")) {
+            try {
+                await window.storage.delete(DB_KEY, true);
+                alert("✅ تم مسح جميع البيانات بنجاح!");
+                location.reload();
+            } catch (error) {
+                alert("❌ فشل مسح البيانات!");
+            }
+        }
+    }
+
+    function getAdvice(avg) {
+        let score = parseFloat(avg);
+        if (isNaN(score)) return null;
+        if (score >= 8.5) return { class: 'excellent', text: '<b>توجيه تربوي:</b> ممتـاز! لقد أثبتت جدارتك بتفوقك الواضح. استمر في هذا المسار.' };
+        if (score >= 6.5) return { class: 'average', text: '<b>توجيه تربوي:</b> عمل جيد. نتيجتك مرضية، وننتظر منك الأفضل في المرة القادمة.' };
+        return { class: 'low', text: '<b>نصيحة تربوية:</b> لا تقلق، هذه مجرد بداية. ضاعف مجهودك وستتحسن نتائجك حتماً بالاجتهاد.' };
+    }
+
+    async function searchStudent() {
+        const idInput = document.getElementById('studentID').value.trim().toUpperCase();
+        const output = document.getElementById('output');
+        
+        if (!idInput) {
+            output.innerHTML = '<p class="error">⚠️ الرجاء إدخال الرمز السري!</p>';
+            return;
+        }
+
+        output.innerHTML = '<p class="loading">⏳ جاري البحث...</p>';
+        
+        const database = await loadDatabase();
+        
+        if (!database) {
+            output.innerHTML = '<p class="error">❌ لا توجد بيانات متاحة حالياً!</p>';
+            return;
+        }
+
+        const student = database[idInput];
+
+        if (student) {
+            let advice = getAdvice(student.average);
+            let html = `<div class="result-header">المتعلم(ة): ${student.name}</div>`;
+            html += `<table><tr><th>المادة / المكون</th><th>النقطة</th></tr>`;
+            student.grades.forEach(item => {
+                html += `<tr><td>${item.subject}</td><td><b>${item.score}</b></td></tr>`;
+            });
+            html += `<tr class="total-row"><td>المعدل العام للمراقبة</td><td>${student.average}</td></tr></table>`;
+            if (advice) html += `<div class="advice-box ${advice.class}">${advice.text}</div>`;
+            output.innerHTML = html;
+        } else {
+            output.innerHTML = `<p class="error">❌ الرمز السري غير صحيح أو غير موجود.</p>`;
+        }
+    }
+</script>
+
+</body>
+</html>
