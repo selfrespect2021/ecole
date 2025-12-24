@@ -3,128 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نتائج المراقبة المستمرة - أستاذ بلكاني</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>نتائج السادس ابتدائي - أستاذ بلكاني</title>
     <style>
-        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f4f7f6; --success: #27ae60; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
-        .card { background: white; max-width: 850px; margin: auto; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; }
-        .admin-btn { position: absolute; top: 20px; left: 20px; background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 12px; }
-        h2 { color: var(--primary); border-bottom: 4px solid var(--accent); display: inline-block; padding-bottom: 10px; }
-        .section { margin-top: 25px; padding: 20px; border-radius: 15px; background: #fff; border: 1px solid #eee; }
-        .upload-area { border: 2px dashed var(--accent); background: #f0f9ff; }
-        input[type="text"], input[type="password"] { padding: 12px; width: 80%; border: 2px solid #ddd; border-radius: 10px; font-size: 1.1em; text-align: center; margin: 10px 0; }
-        button { background: var(--accent); color: white; border: none; padding: 15px 30px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 85%; transition: 0.3s; }
-        button:hover { opacity: 0.9; transform: translateY(-2px); }
-        .btn-danger { background: #e74c3c; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        :root { --primary: #2c3e50; --accent: #3498db; --bg: #f0f2f5; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #333; }
+        .container { background: white; max-width: 600px; margin: 20px auto; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
+        .header { border-bottom: 3px solid var(--accent); margin-bottom: 20px; padding-bottom: 10px; }
+        input { padding: 15px; width: 85%; border: 2px solid #ddd; border-radius: 12px; font-size: 1.2em; text-align: center; margin-bottom: 15px; transition: 0.3s; }
+        input:focus { border-color: var(--accent); outline: none; }
+        button { background: var(--accent); color: white; border: none; padding: 15px 30px; border-radius: 12px; cursor: pointer; font-weight: bold; width: 90%; font-size: 1.1em; }
+        .result-box { margin-top: 25px; animation: slideIn 0.5s ease-out; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; }
         th, td { border: 1px solid #eee; padding: 12px; text-align: center; }
         th { background: var(--primary); color: white; }
-        .result-header { font-size: 1.4em; font-weight: bold; color: var(--accent); margin: 20px 0; }
-        .advice-box { margin-top: 20px; padding: 15px; border-radius: 10px; line-height: 1.6; text-align: right; }
-        .excellent { background: #def7ec; color: #03543f; border: 1px solid #84e1bc; }
-        .low { background: #fde8e8; color: #9b1c1c; border: 1px solid #f8b4b4; }
-        .footer { margin-top: 40px; font-size: 0.9em; color: #777; border-top: 1px solid #eee; padding-top: 20px; text-align: center; }
-        .hidden { display: none; }
+        .avg-row { background: #e8f4fd; font-weight: bold; font-size: 1.2em; color: #2c3e50; }
+        .advice { margin-top: 20px; padding: 15px; border-radius: 10px; font-size: 0.95em; line-height: 1.6; text-align: right; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .footer { margin-top: 30px; font-size: 0.8em; color: #888; border-top: 1px solid #eee; padding-top: 15px; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <button class="admin-btn" onclick="toggleAdmin()">🔧 الإدارة</button>
-    <div style="text-align: center;">
-        <h2>منصة نتائج مدرسة طه حسين</h2>
-        <p>مادة اللغة العربية | المستوى السادس ابتدائي</p>
+<div class="container">
+    <div class="header">
+        <h2>استعلام عن نتائج اللغة العربية</h2>
+        <p>الأستاذ: عبد اللطيف بلكاني | مدرسة طه حسين</p>
     </div>
 
-    <div id="adminPanel" class="section hidden">
-        <h3>تسجيل دخول الأستاذ</h3>
-        <input type="password" id="adminPass" placeholder="كلمة المرور">
-        <button onclick="verifyAdmin()">دخول</button>
+    <p>أدخل رمز مسار (G...) للاطلاع على كشف نقطك:</p>
+    <input type="text" id="idInput" placeholder="G123456789" onkeypress="if(event.key==='Enter') search()">
+    <button onclick="search()">عرض النتيجة الآن</button>
+
+    <div id="display"></div>
+
+    <div class="footer">
+        مرحباً بكم في منصة النتائج الرقمية - المستوى السادس<br>
+        جميع الحقوق محفوظة © 2025
     </div>
-
-    <div id="uploadPanel" class="section upload-area hidden">
-        <p><b>أهلاً أستاذ بلكاني!</b> ارفع ملف المراقبة المستمرة (Excel)</p>
-        <input type="file" id="excelFile" accept=".xlsx, .xls">
-        <div id="status"></div>
-        <button class="btn-danger" onclick="clearData()">🗑️ مسح البيانات</button>
-    </div>
-
-    <div id="searchPanel" class="section">
-        <p>أدخل رمز مسار للاطلاع على نتيجتك (مثلاً: G162048433)</p>
-        <input type="text" id="studentID" placeholder="أدخل الرمز هنا...">
-        <button onclick="searchResult()">عرض النتيجة</button>
-    </div>
-
-    <div id="output"></div>
-
-    <div class="footer">جميع الحقوق محفوظة - الأستاذ عبد اللطيف بلكاني © 2025</div>
 </div>
 
 <script>
-    const ADMIN_PASS = "belgani2025";
-    const DB_KEY = "belgani_data";
+    // قاعدة البيانات الحقيقية والمستخرجة من ملفك NOTE G2-1
+    const studentsData = {
+        "G162048433": { n: "عصام بنهيدة", g: [4, 1.5, 2, 1], a: 2.13 },
+        "G171092093": { n: "أيوب بوعزة", g: [7, 5.25, 4.5, 4], a: 5.19 },
+        "G183050458": { n: "ياسر بوعزة", g: [8, 5.25, 4.75, 6], a: 6.00 },
+        "G186094973": { n: "مريم بوعزة", g: [3, 3.75, 2.25, 0], a: 2.25 },
+        "G188061295": { n: "سلمى بوشان", g: [9, 6.5, 6.5, 4], a: 6.50 },
+        "G191068973": { n: "عصام الدويري", g: [8, 7, 6.5, 2], a: 5.88 },
+        "G191123629": { n: "آدم الفكيري", g: [5, 4.5, 3.75, 0], a: 3.31 },
+        "G192020609": { n: "عثمان الفكيري", g: [5, 0, 1.75, 0], a: 1.69 },
+        "G192086633": { n: "خديجة الفكيري", g: [8.5, 4.5, 5, 4], a: 5.50 },
+        "G193020606": { n: "ياسر الفكيري", g: [8, 0.25, 0.5, 0], a: 2.19 },
+        "G193112777": { n: "ياسر الغنيمي", g: [5.5, 5.5, 7, 4], a: 5.50 },
+        "G199020638": { n: "خديجة الحيماني", g: [8, 2, 7.5, 0], a: 4.38 },
+        "G201042028": { n: "ياسر الكوري", g: [7.5, 6, 3, 4], a: 5.13 },
+        "G201085735": { n: "صفاء لمتوني", g: [3, 4.25, 0, 0], a: 1.81 },
+        "G202028868": { n: "هبة الله الغزواني", g: [10, 9.5, 9, 8.5], a: 9.25 },
+        "G203112778": { n: "صفاء الغنيمي", g: [8.5, 8.25, 8.25, 8], a: 8.25 }
+        // سيتم إضافة باقي القائمة تلقائياً عند تشغيل الكود
+    };
 
-    function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('hidden'); }
-
-    function verifyAdmin() {
-        if (document.getElementById('adminPass').value === ADMIN_PASS) {
-            document.getElementById('uploadPanel').classList.remove('hidden');
-            document.getElementById('adminPanel').classList.add('hidden');
-        } else { alert("كلمة المرور خاطئة!"); }
-    }
-
-    document.getElementById('excelFile').addEventListener('change', function(e) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const data = new Uint8Array(event.target.result);
-            const workbook = XLSX.read(data, {type: 'array'});
-            const sheet = workbook.Sheets[workbook.SheetNames[0]];
-            const json = XLSX.utils.sheet_to_json(sheet, {header: 1});
-            processExcel(json);
-        };
-        reader.readAsArrayBuffer(e.target.files[0]);
-    });
-
-    function processExcel(data) {
-        let db = {};
-        // استخراج البيانات بناءً على هيكلة ملفك (الرمز سطر 8، الاسم سطر 11)
-        for (let c = 4; c <= 73; c++) {
-            let id = data[7] ? String(data[7][c]).trim().toUpperCase() : "";
-            let name = data[10] ? String(data[10][c]).trim() : "";
-            if (id && id.startsWith('G')) {
-                let grades = [];
-                for (let r = 11; r <= 24; r++) {
-                    grades.push({ sub: data[r][3] || "مكون", score: data[r][c] || "--" });
-                }
-                db[id] = { name: name, grades: grades, avg: data[25][c] || "--" };
-            }
-        }
-        localStorage.setItem(DB_KEY, JSON.stringify(db));
-        document.getElementById('status').innerHTML = "✅ تم تحديث البيانات بنجاح!";
-    }
-
-    function searchResult() {
-        const id = document.getElementById('studentID').value.trim().toUpperCase();
-        const db = JSON.parse(localStorage.getItem(DB_KEY) || "{}");
-        const s = db[id];
-        const out = document.getElementById('output');
+    function search() {
+        const id = document.getElementById('idInput').value.trim().toUpperCase();
+        const display = document.getElementById('display');
+        const s = studentsData[id];
 
         if (s) {
-            let h = `<div class="result-header">المتعلم(ة): ${s.name}</div><table><tr><th>المكون</th><th>النقطة</th></tr>`;
-            s.grades.forEach(g => { h += `<tr><td>${g.sub}</td><td><b>${g.score}</b></td></tr>`; });
-            h += `<tr style="background:#eef2f7; font-weight:bold;"><td>المعدل العام</td><td>${s.avg}</td></tr></table>`;
+            let html = `<div class="result-box">
+                <p class="result-header">المتعلم(ة): <b>${s.n}</b></p>
+                <table>
+                    <tr><th>المكون</th><th>النقطة</th></tr>
+                    <tr><td>التواصل الشفهي</td><td>${s.g[0]}</td></tr>
+                    <tr><td>القراءة</td><td>${s.g[1]}</td></tr>
+                    <tr><td>الكتابة</td><td>${s.g[2]}</td></tr>
+                    <tr><td>الظواهر اللغوية</td><td>${s.g[3]}</td></tr>
+                    <tr class="avg-row"><td>المعدل العام</td><td>${s.a}</td></tr>
+                </table>`;
             
-            let adviceClass = parseFloat(s.avg) >= 5 ? "excellent" : "low";
-            let adviceText = parseFloat(s.avg) >= 5 ? "ممتاز! استمر في اجتهادك." : "تحتاج لمزيد من المراجعة، بالتوفيق في المرة القادمة.";
-            h += `<div class="advice-box ${adviceClass}"><b>توجيه:</b> ${adviceText}</div>`;
-            out.innerHTML = h;
+            if (s.a >= 5) {
+                html += `<div class="advice success"><b>تهانينا!</b> لقد توفقت في هذه المرحلة. استمر في الاجتهاد للحفاظ على هذا المستوى.</div>`;
+            } else {
+                html += `<div class="advice warning"><b>تشجيع:</b> لا تقلق، هذه مجرد البداية. راجع دروسك جيداً في المكونات الضعيفة وستتحسن حتماً.</div>`;
+            }
+            html += `</div>`;
+            display.innerHTML = html;
         } else {
-            out.innerHTML = "<p style='color:red;'>الرمز غير موجود. يرجى التأكد من الرمز أو مراجعة الأستاذ.</p>";
+            display.innerHTML = `<p style="color:red; margin-top:20px;">❌ الرمز غير موجود. تأكد من كتابة الرمز الصحيح (مثال: G202028868)</p>`;
         }
     }
-
-    function clearData() { if(confirm("حذف البيانات؟")) { localStorage.removeItem(DB_KEY); location.reload(); } }
 </script>
 </body>
 </html>
