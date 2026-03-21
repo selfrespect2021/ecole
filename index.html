@@ -7,553 +7,261 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ink: #1a1a2e;
-  --teal: #0a3d62;
-  --teal-mid: #1565a8;
-  --teal-light: #e8f4fd;
-  --gold: #c9a84c;
-  --gold-light: #f5e098;
+  --primary: #1565a8;
+  --primary-dark: #0a3d62;
+  --primary-light: #e8f3fd;
+  --gold: #b8860b;
+  --gold-bg: #fdf8e8;
   --green: #1a6b4a;
-  --green-bg: #e8f5f0;
-  --orange: #8b4a0e;
-  --orange-bg: #fef3e2;
+  --green-bg: #eaf7f0;
+  --green-bd: #a8d8bf;
+  --orange: #9a4e0a;
+  --orange-bg: #fef4e6;
+  --orange-bd: #f5c990;
   --red: #8b1a1a;
   --red-bg: #fdeaea;
-  --border: #dde4ed;
-  --radius: 18px;
-  --shadow: 0 8px 32px rgba(10,61,98,0.13);
+  --red-bd: #f5c2c2;
+  --p1-bg:#dbeafe;--p1-tx:#1e3a8a;
+  --p2-bg:#fde68a;--p2-tx:#78350f;
+  --p3-bg:#d1fae5;--p3-tx:#065f46;
+  --p4-bg:#ede9fe;--p4-tx:#4c1d95;
+  --border:#e2e8f2;
+  --text:#1e293b;
+  --muted:#64748b;
+  --radius:16px;
+  --sh:0 4px 20px rgba(21,101,168,0.11);
+  --sh-sm:0 2px 8px rgba(21,101,168,0.07);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Cairo',sans-serif;background:#eef3fb;min-height:100vh;color:var(--text);padding-bottom:60px;}
 
-body {
-  font-family: 'Cairo', sans-serif;
-  min-height: 100vh;
-  background: var(--ink);
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(21,101,168,0.45) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 110%, rgba(201,168,76,0.1) 0%, transparent 60%);
-  padding: 0 0 60px;
-}
+/* HEADER */
+.hdr{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 100%);color:#fff;text-align:center;padding:40px 20px 50px;position:relative;overflow:hidden;}
+.hdr::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:32px;background:#eef3fb;clip-path:ellipse(55% 100% at 50% 100%);}
+.hdr-deco{font-size:.85rem;letter-spacing:10px;color:rgba(255,255,255,.4);display:block;margin-bottom:12px;}
+.hdr h1{font-size:clamp(1.6rem,4.5vw,2.4rem);font-weight:900;}
+.hdr h1 span{color:#fde68a;}
+.hdr-sub{margin-top:7px;font-size:.86rem;color:rgba(255,255,255,.55);}
 
-/* ═══ HEADER ═══ */
-.header {
-  text-align: center;
-  padding: 48px 20px 36px;
-  position: relative;
-}
-.header-deco {
-  font-size: 1.1rem;
-  letter-spacing: 12px;
-  color: var(--gold);
-  opacity: 0.6;
-  display: block;
-  margin-bottom: 14px;
-}
-.header h1 {
-  font-size: clamp(1.7rem, 5vw, 2.8rem);
-  font-weight: 900;
-  color: white;
-  letter-spacing: -0.5px;
-  line-height: 1.2;
-}
-.header h1 span { color: var(--gold-light); }
-.header-sub {
-  margin-top: 10px;
-  color: rgba(255,255,255,0.55);
-  font-size: 0.9rem;
-  font-weight: 400;
-  letter-spacing: 0.3px;
-}
-.header-divider {
-  width: 60px; height: 3px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  margin: 18px auto 0;
-  border-radius: 2px;
-}
+/* SEARCH CARD */
+.sw{max-width:490px;margin:-10px auto 26px;padding:0 16px;position:relative;z-index:5;}
+.sc{background:#fff;border-radius:var(--radius);box-shadow:var(--sh);padding:22px 20px 18px;border:1px solid var(--border);}
+.sc label{display:block;color:var(--muted);font-size:.83rem;margin-bottom:11px;text-align:center;font-weight:500;}
+.sr{display:flex;gap:8px;}
+.sr input{flex:1;padding:12px 15px;border:2px solid var(--border);border-radius:11px;background:#f8fafc;font-family:'Cairo',sans-serif;font-size:.97rem;direction:ltr;text-align:center;letter-spacing:1.5px;color:var(--text);outline:none;transition:border-color .2s,background .2s;}
+.sr input::placeholder{color:#b0bec5;letter-spacing:0;}
+.sr input:focus{border-color:var(--primary);background:#fff;}
+.sr button{padding:12px 20px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:none;border-radius:11px;font-family:'Cairo',sans-serif;font-size:.92rem;font-weight:800;cursor:pointer;white-space:nowrap;box-shadow:0 3px 10px rgba(21,101,168,.28);transition:transform .15s,box-shadow .15s;}
+.sr button:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(21,101,168,.38);}
+.emsg{display:none;background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd);border-radius:9px;padding:9px 14px;margin-top:11px;font-size:.83rem;text-align:center;}
+.emsg.show{display:block;}
 
-/* ═══ SEARCH CARD ═══ */
-.search-wrap {
-  max-width: 520px;
-  margin: 0 auto 32px;
-  padding: 0 16px;
-}
-.search-card {
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: var(--radius);
-  padding: 28px 24px 24px;
-  text-align: center;
-}
-.search-card label {
-  display: block;
-  color: rgba(255,255,255,0.7);
-  font-size: 0.88rem;
-  margin-bottom: 14px;
-  font-weight: 500;
-}
-.search-row {
-  display: flex;
-  gap: 10px;
-}
-.search-row input {
-  flex: 1;
-  padding: 14px 18px;
-  border: 2px solid rgba(255,255,255,0.15);
-  border-radius: 12px;
-  background: rgba(255,255,255,0.08);
-  color: white;
-  font-family: 'Cairo', sans-serif;
-  font-size: 1rem;
-  direction: ltr;
-  text-align: center;
-  letter-spacing: 1.5px;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s;
-}
-.search-row input::placeholder { color: rgba(255,255,255,0.3); letter-spacing: 0; }
-.search-row input:focus {
-  border-color: var(--gold);
-  background: rgba(255,255,255,0.12);
-}
-.search-row button {
-  padding: 14px 22px;
-  background: linear-gradient(135deg, var(--gold) 0%, #e8b840 100%);
-  color: var(--ink);
-  border: none;
-  border-radius: 12px;
-  font-family: 'Cairo', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 800;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: transform 0.15s, opacity 0.15s;
-}
-.search-row button:hover { transform: translateY(-1px); opacity: 0.92; }
-.search-row button:active { transform: translateY(0); }
+/* RESULT */
+#result{max-width:660px;margin:0 auto;padding:0 16px;display:none;}
+#result.show{display:block;animation:fu .3s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-.error-msg {
-  display: none;
-  background: var(--red-bg);
-  color: var(--red);
-  border: 1px solid #f5c2c2;
-  border-radius: 10px;
-  padding: 11px 16px;
-  margin-top: 14px;
-  font-size: 0.87rem;
-  text-align: center;
-}
-.error-msg.show { display: block; }
+/* STUDENT HERO */
+.hero{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--sh);padding:20px 18px 16px;text-align:center;margin-bottom:12px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary-dark),var(--primary),#42a5f5);}
+.stu-name{font-size:clamp(1.25rem,3.5vw,1.75rem);font-weight:900;color:var(--primary-dark);margin-top:4px;}
+.stu-meta{color:var(--muted);font-size:.84rem;margin-top:4px;}
+.stu-id{display:inline-block;margin-top:8px;background:var(--primary-light);color:var(--primary);border:1px solid #c5ddf7;padding:3px 14px;border-radius:20px;font-size:.76rem;letter-spacing:1.5px;direction:ltr;}
 
-/* ═══ RESULT AREA ═══ */
-#result {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 0 16px;
-  display: none;
-}
-#result.show { display: block; animation: fadeUp 0.35s ease; }
+/* PHASE TABS */
+.ptabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+.ptab{background:#fff;border:1px solid var(--border);border-radius:11px;padding:9px 5px;text-align:center;color:#c0cfe0;box-shadow:var(--sh-sm);}
+.ptab.has{border-color:#c5ddf7;color:var(--primary);background:var(--primary-light);}
+.ptab .pn{font-size:.95rem;font-weight:900;display:block;}
+.ptab .pl{font-size:.65rem;display:block;margin-top:2px;opacity:.75;}
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+/* SUBJECT BLOCK */
+.sb{margin-bottom:12px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--sh);}
+.sh{background:linear-gradient(90deg,var(--primary-dark),var(--primary));color:#fff;padding:10px 17px;font-size:.9rem;font-weight:800;display:flex;align-items:center;gap:8px;}
+table.gt{width:100%;border-collapse:collapse;background:#fff;}
+table.gt th{background:#f0f6fd;color:var(--primary-dark);font-size:.76rem;font-weight:700;padding:8px 9px;text-align:center;border-bottom:2px solid #d4e8f8;}
+table.gt td{padding:8px 9px;font-size:.84rem;text-align:center;border-bottom:1px solid #f0f4f9;color:var(--text);}
+table.gt td.lc{text-align:right;color:var(--muted);font-size:.8rem;}
+table.gt td.cc{font-weight:800;font-size:.82rem;color:var(--primary);}
+table.gt tr:last-child td{border-bottom:none;}
+.ga{color:var(--green);font-weight:800;}
+.gb{color:var(--orange);font-weight:800;}
+.gc{color:var(--red);font-weight:800;}
 
-/* ═══ STUDENT HERO ═══ */
-.student-hero {
-  background: linear-gradient(135deg, rgba(21,101,168,0.9) 0%, rgba(10,61,98,0.95) 100%);
-  border: 1px solid rgba(201,168,76,0.25);
-  border-radius: var(--radius);
-  padding: 28px 24px 22px;
-  text-align: center;
-  margin-bottom: 16px;
-  position: relative;
-  overflow: hidden;
-}
-.student-hero::after {
-  content: '★';
-  position: absolute;
-  font-size: 180px;
-  color: rgba(201,168,76,0.04);
-  bottom: -40px; left: -20px;
-  line-height: 1;
-  pointer-events: none;
-}
-.stu-name { font-size: clamp(1.5rem, 4vw, 2.1rem); font-weight: 900; color: var(--gold-light); }
-.stu-meta { color: rgba(255,255,255,0.6); font-size: 0.88rem; margin-top: 6px; }
-.stu-massar {
-  display: inline-block;
-  margin-top: 10px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.6);
-  padding: 4px 16px;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  letter-spacing: 1.5px;
-  direction: ltr;
-}
+/* PILLS */
+.pp{display:inline-flex;align-items:center;padding:3px 9px;border-radius:7px;font-size:.78rem;font-weight:700;margin:2px 1px;white-space:nowrap;}
+.pp1{background:var(--p1-bg);color:var(--p1-tx);}
+.pp2{background:var(--p2-bg);color:var(--p2-tx);}
+.pp3{background:var(--p3-bg);color:var(--p3-tx);}
+.pp4{background:var(--p4-bg);color:var(--p4-tx);}
+.ppe{background:#f1f5f9;color:#94a3b8;font-style:italic;}
 
-/* ═══ PHASE TABS ═══ */
-.phase-tabs {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  margin-bottom: 16px;
-}
-.ptab {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  padding: 10px 6px;
-  text-align: center;
-  color: rgba(255,255,255,0.25);
-  cursor: default;
-}
-.ptab.has {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(201,168,76,0.35);
-  color: var(--gold-light);
-}
-.ptab .pt-num { font-size: 1.05rem; font-weight: 900; display: block; }
-.ptab .pt-lbl { font-size: 0.68rem; display: block; margin-top: 2px; opacity: 0.7; }
+/* AVG ROW */
+.ar td{background:var(--gold-bg)!important;font-weight:800!important;border-top:2px solid #e8c84a!important;padding:11px 11px!important;}
+.ab{display:inline-block;padding:3px 13px;border-radius:20px;font-size:.92rem;font-weight:900;}
+.abh{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);}
+.abm{background:var(--orange-bg);color:var(--orange);border:1px solid var(--orange-bd);}
+.abl{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd);}
 
-/* ═══ SUBJECT BLOCK ═══ */
-.subject-block { margin-bottom: 14px; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
-.subject-head {
-  background: linear-gradient(90deg, var(--teal) 0%, var(--teal-mid) 100%);
-  color: white;
-  padding: 12px 18px;
-  font-size: 0.95rem;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-table.gt {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-}
-table.gt th {
-  background: #f0f5fb;
-  color: var(--teal);
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 9px 12px;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
-}
-table.gt td {
-  padding: 9px 12px;
-  font-size: 0.87rem;
-  text-align: center;
-  border-bottom: 1px solid #f2f4f8;
-  color: var(--ink);
-}
-table.gt td.label-col { text-align: right; color: #555; font-size: 0.83rem; }
-table.gt td.code-col { font-weight: 700; font-size: 0.85rem; color: var(--teal); }
-table.gt tr:last-child td { border-bottom: none; }
+/* ADVICE */
+.adv{border-radius:var(--radius);padding:16px 18px;margin-top:4px;font-size:.86rem;line-height:1.9;}
+.advh{background:var(--green-bg);border:1px solid var(--green-bd);border-right:5px solid var(--green);}
+.advm{background:var(--orange-bg);border:1px solid var(--orange-bd);border-right:5px solid #e07820;}
+.advl{background:var(--red-bg);border:1px solid var(--red-bd);border-right:5px solid #c0392b;}
+.adv strong{display:block;font-size:.92rem;margin-bottom:7px;}
+.adv ul{padding-right:17px;}
+.adv li{margin-bottom:3px;}
 
-/* Grade coloring */
-.gv { font-weight: 800; font-size: 0.97rem; }
-.ga { color: #1a7a4a; }
-.gb { color: #b06010; }
-.gc { color: #b01a1a; }
-
-/* Phase pills in cells */
-.pp {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 9px;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  margin: 2px 1px;
-}
-.pp1 { background: #dbeafe; color: #1e40af; }
-.pp2 { background: #fef3c7; color: #92400e; }
-.pp3 { background: #d1fae5; color: #065f46; }
-.pp4 { background: #ede9fe; color: #5b21b6; }
-.pp-empty { background: #f3f4f6; color: #aaa; font-style: italic; }
-
-/* Average row */
-.avg-row td {
-  background: linear-gradient(90deg, #fffbec, #fef7d5) !important;
-  font-weight: 800 !important;
-  border-top: 2px solid var(--gold) !important;
-  padding: 12px 14px !important;
-}
-.avg-badge {
-  display: inline-block;
-  padding: 4px 14px;
-  border-radius: 20px;
-  font-size: 0.97rem;
-  font-weight: 900;
-}
-.ab-h { background: var(--green-bg); color: var(--green); border: 1px solid #b3d9c7; }
-.ab-m { background: var(--orange-bg); color: var(--orange); border: 1px solid #f5c9a0; }
-.ab-l { background: var(--red-bg); color: var(--red); border: 1px solid #f5c2c2; }
-
-/* ═══ ADVICE ═══ */
-.advice {
-  border-radius: 14px;
-  padding: 18px 20px;
-  margin-top: 4px;
-  font-size: 0.88rem;
-  line-height: 1.9;
-}
-.advice-h { background: var(--green-bg); border-right: 5px solid var(--green); }
-.advice-m { background: var(--orange-bg); border-right: 5px solid #e07820; }
-.advice-l { background: var(--red-bg); border-right: 5px solid #c0392b; }
-.advice strong { display: block; font-size: 0.95rem; margin-bottom: 8px; }
-.advice ul { padding-right: 18px; }
-.advice li { margin-bottom: 3px; }
-
-/* ═══ FOOTER ═══ */
-.footer {
-  text-align: center;
-  color: rgba(255,255,255,0.25);
-  font-size: 0.75rem;
-  margin-top: 40px;
-  line-height: 1.9;
-}
-
-@media(max-width:480px) {
-  .search-row { flex-direction: column; }
-  table.gt th, table.gt td { padding: 7px 6px; font-size: 0.78rem; }
-}
+.footer{text-align:center;color:var(--muted);font-size:.74rem;margin-top:36px;line-height:1.9;}
+@media(max-width:460px){.sr{flex-direction:column;} table.gt th,table.gt td{padding:6px 5px;font-size:.75rem;}}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <span class="header-deco">✦ &nbsp; ✦ &nbsp; ✦</span>
+<div class="hdr">
+  <span class="hdr-deco">✦ &nbsp; ✦ &nbsp; ✦</span>
   <h1>كشف <span>النقط</span></h1>
-  <div class="header-sub">مدرسة طه حسين &nbsp;·&nbsp; الأستاذ عبد اللطيف بلكاني &nbsp;·&nbsp; 2025/2026</div>
-  <div class="header-divider"></div>
+  <div class="hdr-sub">مدرسة طه حسين &nbsp;·&nbsp; الأستاذ عبد اللطيف بلكاني &nbsp;·&nbsp; 2025/2026</div>
 </div>
 
-<!-- SEARCH -->
-<div class="search-wrap">
-  <div class="search-card">
+<div class="sw">
+  <div class="sc">
     <label>أدخل رقم مسار للاطلاع على نقطك التفصيلية</label>
-    <div class="search-row">
+    <div class="sr">
       <input id="mid" type="text" placeholder="G…" autocomplete="off" spellcheck="false">
       <button onclick="go()">عرض</button>
     </div>
-    <div class="error-msg" id="err">⚠️ رقم مسار غير موجود. تحقق من الكتابة.</div>
+    <div class="emsg" id="err">⚠️ رقم مسار غير موجود. تحقق من الكتابة.</div>
   </div>
 </div>
 
-<!-- RESULT -->
 <div id="result">
-  <div class="student-hero">
+  <div class="hero">
     <div class="stu-name" id="rn"></div>
     <div class="stu-meta">القسم: <span id="rc"></span></div>
-    <div class="stu-massar" id="rm"></div>
+    <div class="stu-id" id="rm"></div>
   </div>
 
-  <div class="phase-tabs" id="ptabs"></div>
+  <div class="ptabs" id="ptabs"></div>
 
-  <!-- Arabic -->
-  <div class="subject-block">
-    <div class="subject-head"><span>📚</span> اللغة العربية</div>
+  <div class="sb">
+    <div class="sh">📚 اللغة العربية</div>
     <table class="gt">
       <thead><tr><th>الرمز</th><th>المكوّن</th><th id="th1">النقطة</th></tr></thead>
-      <tbody id="ar-body"></tbody>
-      <tfoot><tr class="avg-row"><td colspan="2" class="label-col" style="padding-right:18px;font-weight:800">المعدل — اللغة العربية</td><td id="ar-avg"></td></tr></tfoot>
+      <tbody id="arb"></tbody>
+      <tfoot><tr class="ar"><td colspan="2" class="lc" style="padding-right:15px;font-weight:800">المعدل — اللغة العربية</td><td id="ara"></td></tr></tfoot>
     </table>
   </div>
 
-  <!-- Civics -->
-  <div class="subject-block">
-    <div class="subject-head"><span>🌍</span> الاجتماعيات</div>
+  <div class="sb">
+    <div class="sh">🌍 الاجتماعيات</div>
     <table class="gt">
       <thead><tr><th>الرمز</th><th>المادة</th><th id="th2">النقطة</th></tr></thead>
-      <tbody id="soc-body"></tbody>
-      <tfoot><tr class="avg-row"><td colspan="2" class="label-col" style="padding-right:18px;font-weight:800">معدل الاجتماعيات</td><td id="soc-avg"></td></tr></tfoot>
+      <tbody id="scb"></tbody>
+      <tfoot><tr class="ar"><td colspan="2" class="lc" style="padding-right:15px;font-weight:800">معدل الاجتماعيات</td><td id="sca"></td></tr></tfoot>
     </table>
   </div>
 
-  <!-- Islam -->
-  <div class="subject-block">
-    <div class="subject-head"><span>🕌</span> التربية الإسلامية</div>
+  <div class="sb">
+    <div class="sh">🕌 التربية الإسلامية</div>
     <table class="gt">
       <thead><tr><th>الرمز</th><th>المادة</th><th id="th3">النقطة</th></tr></thead>
-      <tbody id="isl-body"></tbody>
-      <tfoot><tr class="avg-row"><td colspan="2" class="label-col" style="padding-right:18px;font-weight:800">معدل التربية الإسلامية</td><td id="isl-avg"></td></tr></tfoot>
+      <tbody id="isb"></tbody>
+      <tfoot><tr class="ar"><td colspan="2" class="lc" style="padding-right:15px;font-weight:800">معدل التربية الإسلامية</td><td id="isa"></td></tr></tfoot>
     </table>
   </div>
 
-  <div class="advice" id="adv"></div>
+  <div class="adv" id="adv"></div>
 </div>
 
 <div class="footer">
-  البيانات المعروضة تخص المرحلة الأولى من الموسم الدراسي 2025/2026<br>
+  المرحلة الأولى والثانية &nbsp;·&nbsp; الموسم الدراسي 2025/2026<br>
   سيتم تحديث الصفحة عند توفر نقط المراحل القادمة
 </div>
 
 <script>
-const LABELS = ["PO2","V1","V2","CO1","CO2","LF2","LC1","LC2","LC3","LC4","PE1","PE2","OL1","OL2"];
-const DESC = {
-  PO2:"التواصل الشفهي", V1:"المعجم 1", V2:"المعجم 2",
-  CO1:"فهم المسموع 1", CO2:"فهم المسموع 2", LF2:"طلاقة القراءة",
-  LC1:"فهم المقروء 1", LC2:"فهم المقروء 2", LC3:"فهم المقروء 3", LC4:"فهم المقروء 4",
-  PE1:"الإنتاج الكتابي 1", PE2:"الإنتاج الكتابي 2",
-  OL1:"الظواهر اللغوية 1", OL2:"الظواهر اللغوية 2"
-};
-const PNAMES = ["المرحلة 1","المرحلة 2","المرحلة 3","المرحلة 4"];
-const PC = ["pp1","pp2","pp3","pp4"];
+const LABELS=["PO2","V1","V2","CO1","CO2","LF2","LC1","LC2","LC3","LC4","PE1","PE2","OL1","OL2"];
+const DESC={PO2:"التواصل الشفهي",V1:"المعجم 1",V2:"المعجم 2",CO1:"فهم المسموع 1",CO2:"فهم المسموع 2",LF2:"طلاقة القراءة",LC1:"فهم المقروء 1",LC2:"فهم المقروء 2",LC3:"فهم المقروء 3",LC4:"فهم المقروء 4",PE1:"الإنتاج الكتابي 1",PE2:"الإنتاج الكتابي 2",OL1:"الظواهر اللغوية 1",OL2:"الظواهر اللغوية 2"};
+const PNAMES=["م1","م2","م3","م4"];
+const PFULL=["المرحلة 1","المرحلة 2","المرحلة 3","المرحلة 4"];
+const PC=["pp1","pp2","pp3","pp4"];
 
-const DB = {"G183107408":{"n":"الدرقاوي عز العرب","c":"6APG-1","phases":{"1":{"g":[2,0,0,0,2,4,2.5,6,0,0,4.5,1,3,0.25],"a":1.8,"hist":1,"geo":2,"civ":2,"islam":7.5}}},"G185079604":{"n":"بوحفرة ادم","c":"6APG-1","phases":{"1":{"g":[2,2.5,7.5,0,4,4,1.5,3,6,4,3.5,3,1,0],"a":3,"hist":1,"geo":2.5,"civ":6,"islam":3}}},"G186074182":{"n":"ضياف خديجة","c":"6APG-1","phases":{"1":{"g":[6,5,7.5,2,0,5,5.5,7,8,0,5.5,0,5.75,0],"a":4.09,"hist":4,"geo":4,"civ":6.5,"islam":3}}},"G189134944":{"n":"الشباكي المهدي","c":"6APG-1","phases":{"1":{"g":[4,5,2.5,7,0,9,7,0,6,0,8,6,0,0],"a":3.89,"hist":6.5,"geo":7.5,"civ":4,"islam":9}}},"G191079732":{"n":"فتيحي يحيى","c":"6APG-1","phases":{"1":{"g":[2,2.5,7.5,1,0,3,7,0,2,4,5.5,5,3.25,2],"a":3.2,"hist":5.5,"geo":5.5,"civ":3,"islam":6.5}}},"G193074786":{"n":"لبيض محمد","c":"6APG-1","phases":{"1":{"g":[2,5,5,2,1,4,5.5,0,2,4,7.5,4,0.25,0],"a":3.02,"hist":2.5,"geo":2.5,"civ":6.5,"islam":3}}},"G194020655":{"n":"مطار آية","c":"6APG-1","phases":{"1":{"g":[7,2.5,7.5,8,4,8,4,4,4,4,7,5,4,4],"a":5.21,"hist":9,"geo":10,"civ":10,"islam":9}}},"G197097558":{"n":"بنعبو ريان","c":"6APG-1","phases":{"1":{"g":[2,7.5,7.5,0,0,3,4,7,8,0,0,0,0,0],"a":2.79,"hist":4.5,"geo":6,"civ":2,"islam":2}}},"G200042049":{"n":"خرباق مروة","c":"6APG-1","phases":{"1":{"g":[3,5,10,8,0,7,2.5,3,10,4,8,6.5,5,0],"a":5.14,"hist":5.5,"geo":4,"civ":6.5,"islam":2}}},"G200046452":{"n":"زهران مليكة","c":"6APG-1","phases":{"1":{"g":[6,5,10,8,4,5,5.5,10,10,10,7.5,6,5.75,2],"a":6.77,"hist":6,"geo":7.5,"civ":6.5,"islam":8}}},"G200064286":{"n":"بن المقدم آية","c":"6APG-1","phases":{"1":{"g":[5,5,10,10,5,6,7,10,10,10,9,7.5,8.25,10],"a":8.05,"hist":6,"geo":8,"civ":10,"islam":9.5}}},"G201073556":{"n":"الساعدي محمد","c":"6APG-1","phases":{"1":{"g":[3,0,7.5,4,0,5,2.5,0,4,4,7,5,3,0],"a":3.21,"hist":6,"geo":6.5,"civ":3,"islam":6}}},"G202028855":{"n":"حيمصي الياس","c":"6APG-1","phases":{"1":{"g":[4,7.5,7.5,8,0,9,7,0,0,10,8,7,0,0],"a":4.86,"hist":8,"geo":9,"civ":9.5,"islam":8.5}}},"G202028856":{"n":"الدليلي هاجر","c":"6APG-1","phases":{"1":{"g":[5,7.5,10,9,8,9,8.5,10,10,4,8,7.5,5,4],"a":7.54,"hist":8,"geo":9,"civ":8,"islam":9.5}}},"G202028865":{"n":"فتوحي حمزة","c":"6APG-1","phases":{"1":{"g":[2,7.5,7.5,10,7,9,4,7,6,4,6.5,6,0,0],"a":5.46,"hist":5,"geo":7,"civ":6.5,"islam":8}}},"G202028870":{"n":"القدوري مريم","c":"6APG-1","phases":{"1":{"g":[7,5,10,9,8,10,10,10,10,4,9,7,7,6],"a":8,"hist":10,"geo":10,"civ":10,"islam":9.5}}},"G202028871":{"n":"القدوري آسية","c":"6APG-1","phases":{"1":{"g":[6,10,10,10,5,8,5.5,7,10,4,8,9,6.5,2],"a":7.21,"hist":10,"geo":10,"civ":10,"islam":10}}},"G202028873":{"n":"رزوك جنات","c":"6APG-1","phases":{"1":{"g":[6,10,10,8.5,5,8,10,10,10,4,5,2,7.5,4],"a":7.14,"hist":5,"geo":5.5,"civ":8,"islam":4.5}}},"G202028875":{"n":"حازم محمد امين","c":"6APG-1","phases":{"1":{"g":[6,7.5,10,8,10,10,10,7,10,4,9,9,5.25,10],"a":8.27,"hist":9,"geo":9.5,"civ":7.5,"islam":10}}},"G202028877":{"n":"حجاج عبد الله","c":"6APG-1","phases":{"1":{"g":[6,5,2.5,10,0,5,2.5,7,4,4,8.5,4,1.5,2],"a":4.43,"hist":5,"geo":5.5,"civ":7,"islam":4}}},"G202028878":{"n":"ضياف رانيا","c":"6APG-1","phases":{"1":{"g":[6,10,10,10,9,10,2.5,10,10,4,9,9.5,7.5,6],"a":8.11,"hist":9,"geo":9,"civ":8.5,"islam":9.5}}},"G203028890":{"n":"عنبري جنات","c":"6APG-1","phases":{"1":{"g":[4,2.5,7.5,3,6,3,5.5,0,10,4,6,5.5,1,0],"a":4.14,"hist":5,"geo":8,"civ":6.5,"islam":3}}},"G203028894":{"n":"الحرفاوي زينب","c":"6APG-1","phases":{"1":{"g":[5,2.5,5,8,7,8,5.5,7,10,4,8,7,4,2],"a":5.93,"hist":7,"geo":9,"civ":8.5,"islam":8.5}}},"G203028897":{"n":"الجبلي محمد","c":"6APG-1","phases":{"1":{"g":[4,2.5,7.5,10,8,6,8.5,7,10,10,6,6,1.5,2],"a":6.36,"hist":8,"geo":8.5,"civ":6,"islam":5}}},"G204042031":{"n":"فرينة انوار","c":"6APG-1","phases":{"1":{"g":[6,10,10,10,9,10,10,10,10,4,10,7.5,8.25,4],"a":8.48,"hist":8,"geo":9,"civ":7.5,"islam":10}}},"G204084290":{"n":"امناوي صفاء","c":"6APG-1","phases":{"1":{"g":[6,5,7.5,10,6,8,4.5,4.5,10,10,9,7.5,8.75,10],"a":7.62,"hist":8,"geo":8,"civ":10,"islam":9.5}}},"G205068483":{"n":"الواحدي محمد أمين","c":"6APG-1","phases":{"1":{"g":[3,7.5,10,5,1,10,4,7,8,10,7,5,7.5,6],"a":6.5,"hist":3.5,"geo":7,"civ":2.5,"islam":7}}},"G209006104":{"n":"عفيف اشراق","c":"6APG-1","phases":{"1":{"g":[5,5,7.5,8,4,4,5.5,7,8,4,9,6.5,4,0],"a":5.54,"hist":8,"geo":7,"civ":8,"islam":7.5}}},"G209031884":{"n":"جلال ريان","c":"6APG-1","phases":{"1":{"g":[2,7.5,10,3,3,4,7,10,6,4,6.5,3,0.5,0],"a":4.75,"hist":6,"geo":9.5,"civ":7,"islam":5.5}}},"G209042045":{"n":"المجذوبي الياس","c":"6APG-1","phases":{"1":{"g":[2,7.5,10,2,2,4,10,3,10,4,6,4,0,0],"a":4.61,"hist":4,"geo":5,"civ":6.5,"islam":4.5}}},"G209054745":{"n":"نوار ملاك","c":"6APG-1","phases":{"1":{"g":[8,5,10,6,4.5,6,10,10,10,4,8.5,6,6.25,2],"a":6.88,"hist":5,"geo":6,"civ":7,"islam":6.5}}},"R198042190":{"n":"العيني أنس","c":"6APG-1","phases":{"1":{"g":[2,5,7.5,6,1,5,5.5,7,8,4,6,4.5,2,4],"a":4.82,"hist":5.5,"geo":6,"civ":8,"islam":6.5}}},"F193220916":{"n":"نعيم لقمان","c":"6APG-1","phases":{"1":{"g":[7,5,5,8,2,8,5.5,7,6,4,7,5,4.75,2],"a":5.45,"hist":4.5,"geo":6,"civ":8,"islam":7}}},"G171092093":{"n":"مدزيري محمد","c":"6APG-2","phases":{"1":{"g":[2,7.5,7.5,3,2,3,2.5,0,10,4,5.5,5,4,0],"a":4,"hist":8,"geo":8.5,"civ":8,"islam":4}}},"G183050458":{"n":"الزاهري احمد","c":"6APG-2","phases":{"1":{"g":[3,5,10,4,0,3,4,3,8,4,4,3,1,4],"a":4,"hist":5,"geo":4,"civ":5,"islam":2}}},"G186094973":{"n":"القصيبي محمد امين","c":"6APG-2","phases":{"1":{"g":[3,2.5,10,4,1,5,2.5,3,10,4,6,4,4.5,0],"a":4.25,"hist":6,"geo":5.5,"civ":7,"islam":4}}},"G188061295":{"n":"الحسوني يونس","c":"6APG-2","phases":{"1":{"g":[2,7.5,5,6,4,4,4,4,8,10,8.5,5.5,5.25,2],"a":5.41,"hist":9,"geo":10,"civ":7.5,"islam":4}}},"G191068973":{"n":"البوعناني ايمن","c":"6APG-2","phases":{"1":{"g":[5,5,7.5,5,0,4,10,7,8,10,7,4,1,6],"a":5.68,"hist":4,"geo":8,"civ":7,"islam":3}}},"G191123629":{"n":"بلفحيلية رضى","c":"6APG-2","phases":{"1":{"g":[2,0,2.5,2,0,5,2.5,7,4,4,0,5,3.75,0],"a":2.7,"hist":5,"geo":6,"civ":3,"islam":2}}},"G192020609":{"n":"شاقو سلمى","c":"6APG-2","phases":{"1":{"g":[3,2.5,2.5,6,8,4,2.5,7,8,4,4,5,8,0],"a":4.61,"hist":2,"geo":4,"civ":8,"islam":6}}},"G192086633":{"n":"المساوي مريم","c":"6APG-2","phases":{"1":{"g":[6,2.5,7.5,5,8,4,7,10,10,4,9.5,7,7,8],"a":6.82,"hist":10,"geo":10,"civ":10,"islam":9}}},"G193020606":{"n":"الناجي سعد","c":"6APG-2","phases":{"1":{"g":[4,10,10,8,5,5,7,3,8,4,6,6,4.5,0],"a":5.75,"hist":8,"geo":4,"civ":8,"islam":5}}},"G193112777":{"n":"الفائق مراد","c":"6APG-2","phases":{"1":{"g":[7,2.5,0,4,2,4,7,7,6,4,5,5,0,3.25],"a":4.05,"hist":8,"geo":4,"civ":9,"islam":4}}},"G199020638":{"n":"الجاوي فهد","c":"6APG-2","phases":{"1":{"g":[4,5,5,4,3,3,5.5,7,8,4,2,3,0.25,0],"a":3.84,"hist":5,"geo":3.5,"civ":6,"islam":1}}},"G201042028":{"n":"القباي نسرين","c":"6APG-2","phases":{"1":{"g":[5,2.5,10,6,4,8,7,3,4,10,8.5,4.5,5.5,0],"a":5.57,"hist":2,"geo":7,"civ":6,"islam":4}}},"G201087057":{"n":"الفائق صفاء","c":"6APG-2","phases":{"1":{"g":[5,5,10,7,6,5,10,7,6,10,5.5,6,2,2],"a":6.18,"hist":9,"geo":9.5,"civ":7.5,"islam":7}}},"G201150645":{"n":"الإدريسي عماد","c":"6APG-2","phases":{"1":{"g":[5,10,7.5,8,3,9,5.5,10,10,4,8.5,7,6,5],"a":7.04,"hist":7,"geo":7,"civ":9.5,"islam":9}}},"G202006106":{"n":"المركة ريان","c":"6APG-2","phases":{"1":{"g":[2,7.5,5,5,0,4,3,7,8,10,9.5,6,4.25,0],"a":5.09,"hist":6,"geo":7.5,"civ":7.5,"islam":6.5}}},"G202006858":{"n":"الناصح حمزة","c":"6APG-2","phases":{"1":{"g":[2,5,5,5,1,5,5.5,7,6,4,4,4,1.75,0],"a":3.95,"hist":5,"geo":7.5,"civ":7,"islam":3}}},"G202028861":{"n":"محراش صهيب","c":"6APG-2","phases":{"1":{"g":[7,7.5,5,10,10,10,7,7,10,10,9,10,8.25,8],"a":8.48,"hist":10,"geo":10,"civ":10,"islam":6.5}}},"G202028868":{"n":"الصبح فاطمة الزهراء","c":"6APG-2","phases":{"1":{"g":[3,2.5,10,2,1,7,5.5,0,2,0,7,6.5,1.5,0],"a":3.43,"hist":5,"geo":6,"civ":6,"islam":1}}},"G202028869":{"n":"بوشان نور الهدى","c":"6APG-2","phases":{"1":{"g":[7,5,10,10,5,9,2.5,7,8,4,7,7.5,8,5],"a":6.79,"hist":10,"geo":9,"civ":9.5,"islam":8}}},"G202028872":{"n":"القرقوري زياد","c":"6APG-2","phases":{"1":{"g":[4,2.5,7.5,5,5,4,10,10,10,0,6,5,5,5],"a":5.64,"hist":8,"geo":10,"civ":7,"islam":7}}},"G202028880":{"n":"العكاري رحاب","c":"6APG-2","phases":{"1":{"g":[5,7.5,10,9,4,6,7,7,8,4,7,7.5,8,7],"a":6.93,"hist":9,"geo":9,"civ":10,"islam":8}}},"G202045529":{"n":"الناصري معاد","c":"6APG-2","phases":{"1":{"g":[4,2.5,7.5,3,0,4,2.5,4,6,0,4.5,4,2.5,0],"a":3.18,"hist":2,"geo":8,"civ":7,"islam":1}}},"G202064340":{"n":"الفخري خديجة","c":"6APG-2","phases":{"1":{"g":[9,2.5,5,4,6,6,2.5,7,8,4,5.5,5,6.5,0],"a":5.07,"hist":8,"geo":2,"civ":4,"islam":6}}},"G203028886":{"n":"الفطواكي ريحانة","c":"6APG-2","phases":{"1":{"g":[9,7.5,10,7,8,7,8.5,7,10,4,8,9,9.75,8],"a":8.05,"hist":6,"geo":9,"civ":7.5,"islam":7}}},"G203028888":{"n":"عفوالله امينة","c":"6APG-2","phases":{"1":{"g":[8,7.5,10,10,7,10,10,10,10,10,9.5,9,10,6],"a":9.07,"hist":10,"geo":10,"civ":10,"islam":10}}},"G203028893":{"n":"زيان محمد","c":"6APG-2","phases":{"1":{"g":[4,7.5,7.5,8,2,6,10,7,4,4,8,9,4.5,0],"a":5.82,"hist":7.5,"geo":10,"civ":5,"islam":8}}},"G203028899":{"n":"النائر مروة","c":"6APG-2","phases":{"1":{"g":[9,7.5,10,10,8,8,10,7,10,10,8,9.5,9.5,6],"a":8.75,"hist":8,"geo":9.5,"civ":9,"islam":9.5}}},"G204054755":{"n":"اياس مروان","c":"6APG-2","phases":{"1":{"g":[6,7.5,10,8,8,6,10,10,10,4,5.5,6,6.5,2],"a":7.11,"hist":8,"geo":10,"civ":7.5,"islam":5}}},"G207003378":{"n":"لحمادي إلياس","c":"6APG-2","phases":{"1":{"g":[5,2.5,10,3,0,3,10,7,8,4,4.5,5.5,1.75,0],"a":4.59,"hist":3.5,"geo":5,"civ":6.5,"islam":3.5}}},"G208045490":{"n":"قرواش ايمان","c":"6APG-2","phases":{"1":{"g":[9,7.5,10,10,4,9,5.5,10,10,4,6.5,6,5,4],"a":7.18,"hist":8,"geo":9,"civ":9,"islam":6}}},"G208054751":{"n":"ابوزايد محمد","c":"6APG-2","phases":{"1":{"g":[6,10,10,4,2,4,7,7,10,4,4,3.5,0.5,0],"a":5.14,"hist":4,"geo":8,"civ":7,"islam":4}}},"G208064245":{"n":"البهي محمد","c":"6APG-2","phases":{"1":{"g":[7,10,10,8,4,4,5.5,10,10,4,7,6.5,7,0],"a":6.64,"hist":8,"geo":9,"civ":7.5,"islam":7}}},"G209064244":{"n":"البهي فاطمة الزهراء","c":"6APG-2","phases":{"1":{"g":[5,7.5,0,4,2,4,7,7,10,10,8.75,8,7.5,8],"a":6.34,"hist":7.5,"geo":9.5,"civ":10,"islam":9.5}}},"L209001972":{"n":"بنرمضان محمد أمين","c":"6APG-2","phases":{"1":{"g":[4,2.5,7.5,8,4,4,7,10,4,4,4,4,3,2],"a":4.86,"hist":3,"geo":6,"civ":7,"islam":2}}}};
+const DB={"G183107408":{"n":"الدرقاوي عز العرب","c":"6APG-1","phases":{"1":{"g":[2,0,0,0,2,4,2.5,6,0,0,4.5,1,3,0.25],"a":1.8,"hist":1,"geo":2,"civ":2,"islam":7.5},"2":{"g":[5,10,10,6,6,3,8,8,1,4,null,null,9,5],"a":6.25,"hist":10,"geo":6.5,"civ":6.5,"islam":2}}},"G185079604":{"n":"بوحفرة ادم","c":"6APG-1","phases":{"1":{"g":[2,2.5,7.5,0,4,4,1.5,3,6,4,3.5,3,1,0],"a":3,"hist":1,"geo":2.5,"civ":6,"islam":3},"2":{"g":[1,10,10,8,10,4,10,10,7,4,null,null,7.25,6],"a":7.27,"hist":8.5,"geo":8,"civ":3,"islam":6.5}}},"G186074182":{"n":"ضياف خديجة","c":"6APG-1","phases":{"1":{"g":[6,5,7.5,2,0,5,5.5,7,8,0,5.5,0,5.75,0],"a":4.09,"hist":4,"geo":4,"civ":6.5,"islam":3},"2":{"g":[8,10,10,8,6,5,10,4,7,6,null,null,8.25,7.25],"a":7.46,"hist":2.5,"geo":2,"civ":5,"islam":6}}},"G189134944":{"n":"الشباكي المهدي","c":"6APG-1","phases":{"1":{"g":[4,5,2.5,7,0,9,7,0,6,0,8,6,0,0],"a":3.89,"hist":6.5,"geo":7.5,"civ":4,"islam":9},"2":{"g":[6,10,10,10,10,8,10,8,10,10,null,null,10,8],"a":9.17,"hist":10,"geo":10,"civ":6,"islam":8}}},"G191079732":{"n":"فتيحي يحيى","c":"6APG-1","phases":{"1":{"g":[2,2.5,7.5,1,0,3,7,0,2,4,5.5,5,3.25,2],"a":3.2,"hist":5.5,"geo":5.5,"civ":3,"islam":6.5},"2":{"g":[5,10,10,10,10,5,10,9,6,8,null,null,8.75,5],"a":8.06,"hist":7,"geo":5,"civ":3,"islam":5}}},"G193074786":{"n":"لبيض محمد","c":"6APG-1","phases":{"1":{"g":[2,5,5,2,1,4,5.5,0,2,4,7.5,4,0.25,0],"a":3.02,"hist":2.5,"geo":2.5,"civ":6.5,"islam":3},"2":{"g":[2,10,10,3,8,6,10,6,4,4,null,null,7.75,5],"a":6.31,"hist":3.5,"geo":4,"civ":5,"islam":6}}},"G194020655":{"n":"مطار آية","c":"6APG-1","phases":{"1":{"g":[7,2.5,7.5,8,4,8,4,4,4,4,7,5,4,4],"a":5.21,"hist":9,"geo":10,"civ":10,"islam":9},"2":{"g":[5,10,10,8,10,7,10,10,8,4,null,null,8.5,3],"a":7.79,"hist":10,"geo":6.5,"civ":4,"islam":8}}},"G197097558":{"n":"بنعبو ريان","c":"6APG-1","phases":{"1":{"g":[2,7.5,7.5,0,0,3,4,7,8,0,0,0,0,0],"a":2.79,"hist":4.5,"geo":6,"civ":2,"islam":2},"2":{"g":[3,10,4,6,9,4,10,8,4,1,null,null,9,5.5],"a":6.12,"hist":3.5,"geo":2,"civ":2,"islam":7.5}}},"G200042049":{"n":"خرباق مروة","c":"6APG-1","phases":{"1":{"g":[3,5,10,8,0,7,2.5,3,10,4,8,6.5,5,0],"a":5.14,"hist":5.5,"geo":4,"civ":6.5,"islam":2},"2":{"g":[8,10,10,10,10,7,10,10,5,9,null,null,9,6],"a":8.67,"hist":2,"geo":2,"civ":9,"islam":5}}},"G200046452":{"n":"زهران مليكة","c":"6APG-1","phases":{"1":{"g":[6,5,10,8,4,5,5.5,10,10,10,7.5,6,5.75,2],"a":6.77,"hist":6,"geo":7.5,"civ":6.5,"islam":8},"2":{"g":[10,10,10,10,10,9,10,10,9,10,null,null,9.75,7],"a":9.56,"hist":5,"geo":7,"civ":9,"islam":9}}},"G200064286":{"n":"بن المقدم آية","c":"6APG-1","phases":{"1":{"g":[5,5,10,10,5,6,7,10,10,10,9,7.5,8.25,10],"a":8.05,"hist":6,"geo":8,"civ":10,"islam":9.5},"2":{"g":[9,10,10,10,10,10,10,8,10,10,null,null,9.75,9],"a":9.65,"hist":8,"geo":6.5,"civ":8,"islam":9}}},"G201073556":{"n":"الساعدي محمد","c":"6APG-1","phases":{"1":{"g":[3,0,7.5,4,0,5,2.5,0,4,4,7,5,3,0],"a":3.21,"hist":6,"geo":6.5,"civ":3,"islam":6},"2":{"g":[7,10,10,10,10,5,8,10,8,6,null,null,9.5,7.5],"a":8.42,"hist":3.5,"geo":2,"civ":3,"islam":5}}},"G202028855":{"n":"حيمصي الياس","c":"6APG-1","phases":{"1":{"g":[4,7.5,7.5,8,0,9,7,0,0,10,8,7,0,0],"a":4.86,"hist":8,"geo":9,"civ":9.5,"islam":8.5},"2":{"g":[5,10,10,10,10,9,10,8,10,8,null,null,10,9],"a":9.08,"hist":10,"geo":10,"civ":8,"islam":10}}},"G202028856":{"n":"الدليلي هاجر","c":"6APG-1","phases":{"1":{"g":[5,7.5,10,9,8,9,8.5,10,10,4,8,7.5,5,4],"a":7.54,"hist":8,"geo":9,"civ":8,"islam":9.5},"2":{"g":[8,10,10,10,10,10,10,10,6,10,null,null,10,8.5],"a":9.38,"hist":10,"geo":6.5,"civ":6,"islam":7.5}}},"G202028865":{"n":"فتوحي حمزة","c":"6APG-1","phases":{"1":{"g":[2,7.5,7.5,10,7,9,4,7,6,4,6.5,6,0,0],"a":5.46,"hist":5,"geo":7,"civ":6.5,"islam":8},"2":{"g":[3,10,10,10,10,8,10,8,6,10,null,null,8.75,9],"a":8.56,"hist":8.5,"geo":9,"civ":2,"islam":7.5}}},"G202028870":{"n":"القدوري مريم","c":"6APG-1","phases":{"1":{"g":[7,5,10,9,8,10,10,10,10,4,9,7,7,6],"a":8,"hist":10,"geo":10,"civ":10,"islam":9.5},"2":{"g":[9,10,10,10,10,8,10,10,10,10,null,null,10,7.5],"a":9.54,"hist":10,"geo":10,"civ":9,"islam":10}}},"G202028871":{"n":"القدوري آسية","c":"6APG-1","phases":{"1":{"g":[6,10,10,10,5,8,5.5,7,10,4,8,9,6.5,2],"a":7.21,"hist":10,"geo":10,"civ":10,"islam":10},"2":{"g":[9,10,10,10,10,9,10,10,10,10,null,null,10,7.5],"a":9.62,"hist":10,"geo":10,"civ":6,"islam":10}}},"G202028873":{"n":"رزوك جنات","c":"6APG-1","phases":{"1":{"g":[6,10,10,8.5,5,8,10,10,10,4,5,2,7.5,4],"a":7.14,"hist":5,"geo":5.5,"civ":8,"islam":4.5},"2":{"g":[7,10,8,10,6,10,10,10,9,6,null,null,9.75,8],"a":8.65,"hist":6,"geo":5.5,"civ":8,"islam":8.5}}},"G202028875":{"n":"حازم محمد امين","c":"6APG-1","phases":{"1":{"g":[6,7.5,10,8,10,10,10,7,10,4,9,9,5.25,10],"a":8.27,"hist":9,"geo":9.5,"civ":7.5,"islam":10},"2":{"g":[9,10,10,9,10,10,10,10,10,10,null,null,9.75,7.5],"a":9.6,"hist":10,"geo":10,"civ":9,"islam":9}}},"G202028877":{"n":"حجاج عبد الله","c":"6APG-1","phases":{"1":{"g":[6,5,2.5,10,0,5,2.5,7,4,4,8.5,4,1.5,2],"a":4.43,"hist":5,"geo":5.5,"civ":7,"islam":4},"2":{"g":[7,10,8,10,10,6,10,10,9,10,null,null,8.75,5.5],"a":8.69,"hist":9.5,"geo":8,"civ":6,"islam":7}}},"G202028878":{"n":"ضياف رانيا","c":"6APG-1","phases":{"1":{"g":[6,10,10,10,9,10,2.5,10,10,4,9,9.5,7.5,6],"a":8.11,"hist":9,"geo":9,"civ":8.5,"islam":9.5},"2":{"g":[8,10,10,10,10,8,8,10,10,10,null,null,8.25,9.5],"a":9.31,"hist":10,"geo":10,"civ":9,"islam":10}}},"G203028890":{"n":"عنبري جنات","c":"6APG-1","phases":{"1":{"g":[4,2.5,7.5,3,6,3,5.5,0,10,4,6,5.5,1,0],"a":4.14,"hist":5,"geo":8,"civ":6.5,"islam":3},"2":{"g":[9,10,10,10,10,5,10,10,9,10,null,null,9.75,7],"a":9.15,"hist":2,"geo":4,"civ":4.5,"islam":7.5}}},"G203028894":{"n":"الحرفاوي زينب","c":"6APG-1","phases":{"1":{"g":[5,2.5,5,8,7,8,5.5,7,10,4,8,7,4,2],"a":5.93,"hist":7,"geo":9,"civ":8.5,"islam":8.5},"2":{"g":[9,10,10,10,10,7,10,10,10,10,null,null,10,7.5],"a":9.46,"hist":8.5,"geo":5,"civ":8,"islam":8.5}}},"G203028897":{"n":"الجبلي محمد","c":"6APG-1","phases":{"1":{"g":[4,2.5,7.5,10,8,6,8.5,7,10,10,6,6,1.5,2],"a":6.36,"hist":8,"geo":8.5,"civ":6,"islam":5},"2":{"g":[3,10,10,8,10,6,10,8,10,6,null,null,9.75,9],"a":8.31,"hist":8.5,"geo":8,"civ":3,"islam":7.5}}},"G204042031":{"n":"فرينة انوار","c":"6APG-1","phases":{"1":{"g":[6,10,10,10,9,10,10,10,10,4,10,7.5,8.25,4],"a":8.48,"hist":8,"geo":9,"civ":7.5,"islam":10},"2":{"g":[9,10,10,10,10,10,10,9,10,10,null,null,10,9.5],"a":9.79,"hist":8.5,"geo":10,"civ":9,"islam":9}}},"G204084290":{"n":"امناوي صفاء","c":"6APG-1","phases":{"1":{"g":[6,5,7.5,10,6,8,4.5,4.5,10,10,9,7.5,8.75,10],"a":7.62,"hist":8,"geo":8,"civ":10,"islam":9.5},"2":{"g":[9,10,10,8,10,9,10,10,10,10,null,null,10,9.5],"a":9.62,"hist":10,"geo":8,"civ":9,"islam":10}}},"G205068483":{"n":"الواحدي محمد أمين","c":"6APG-1","phases":{"1":{"g":[3,7.5,10,5,1,10,4,7,8,10,7,5,7.5,6],"a":6.5,"hist":3.5,"geo":7,"civ":2.5,"islam":7},"2":{"g":[9,10,10,9,10,8,10,8,9,10,null,null,8.25,7],"a":9.02,"hist":3.5,"geo":6.5,"civ":4,"islam":5.5}}},"G209006104":{"n":"عفيف اشراق","c":"6APG-1","phases":{"1":{"g":[5,5,7.5,8,4,4,5.5,7,8,4,9,6.5,4,0],"a":5.54,"hist":8,"geo":7,"civ":8,"islam":7.5},"2":{"g":[6,10,10,8,10,6,10,10,8,6,null,null,7.75,3],"a":7.9,"hist":8.5,"geo":6.5,"civ":8,"islam":9.5}}},"G209031884":{"n":"جلال ريان","c":"6APG-1","phases":{"1":{"g":[2,7.5,10,3,3,4,7,10,6,4,6.5,3,0.5,0],"a":4.75,"hist":6,"geo":9.5,"civ":7,"islam":5.5},"2":{"g":[6,10,10,8,10,6,10,8,7,8,null,null,9.25,7.5],"a":8.31,"hist":9.5,"geo":8,"civ":9,"islam":8.5}}},"G209042045":{"n":"المجذوبي الياس","c":"6APG-1","phases":{"1":{"g":[2,7.5,10,2,2,4,10,3,10,4,6,4,0,0],"a":4.61,"hist":4,"geo":5,"civ":6.5,"islam":4.5},"2":{"g":[8,10,10,10,10,9,10,8,9,10,null,null,5.75,7],"a":8.9,"hist":2,"geo":6.5,"civ":6,"islam":6}}},"G209054745":{"n":"نوار ملاك","c":"6APG-1","phases":{"1":{"g":[8,5,10,6,4.5,6,10,10,10,4,8.5,6,6.25,2],"a":6.88,"hist":5,"geo":6,"civ":7,"islam":6.5},"2":{"g":[9,10,10,10,10,8,10,10,9,10,null,null,10,7.5],"a":9.46,"hist":8.5,"geo":6.5,"civ":2,"islam":9}}},"R198042190":{"n":"العيني أنس","c":"6APG-1","phases":{"1":{"g":[2,5,7.5,6,1,5,5.5,7,8,4,6,4.5,2,4],"a":4.82,"hist":5.5,"geo":6,"civ":8,"islam":6.5},"2":{"g":[3,10,10,10,10,5,10,8,10,6,null,null,10,5.5],"a":8.12,"hist":8,"geo":6.5,"civ":5,"islam":6}}},"F193220916":{"n":"نعيم لقمان","c":"6APG-1","phases":{"1":{"g":[7,5,5,8,2,8,5.5,7,6,4,7,5,4.75,2],"a":5.45,"hist":4.5,"geo":6,"civ":8,"islam":7},"2":{"g":[3,10,10,10,10,9,10,10,9,10,null,null,9.75,8.5],"a":9.1,"hist":7,"geo":6.5,"civ":5,"islam":4.5}}},"G171092093":{"n":"مدزيري محمد","c":"6APG-2","phases":{"1":{"g":[2,7.5,7.5,3,2,3,2.5,0,10,4,5.5,5,4,0],"a":4,"hist":8,"geo":8.5,"civ":8,"islam":4},"2":{"g":[7,10,10,10,4,4,10,8,2,8,null,null,10,3],"a":7.17,"hist":4.5,"geo":5,"civ":3,"islam":3.5}}},"G183050458":{"n":"الزاهري احمد","c":"6APG-2","phases":{"1":{"g":[3,5,10,4,0,3,4,3,8,4,4,3,1,4],"a":4,"hist":5,"geo":4,"civ":5,"islam":2},"2":{"g":[6,10,10,8,9,4,10,8,6,7,null,null,10,6.5],"a":7.88,"hist":3,"geo":5,"civ":2,"islam":2.5}}},"G186094973":{"n":"القصيبي محمد امين","c":"6APG-2","phases":{"1":{"g":[3,2.5,10,4,1,5,2.5,3,10,4,6,4,4.5,0],"a":4.25,"hist":6,"geo":5.5,"civ":7,"islam":4},"2":{"g":[5,10,10,6,5,5,4,8,9,6,null,null,6.75,2],"a":6.4,"hist":3.5,"geo":8,"civ":5,"islam":5}}},"G188061295":{"n":"الحسوني يونس","c":"6APG-2","phases":{"1":{"g":[2,7.5,5,6,4,4,4,4,8,10,8.5,5.5,5.25,2],"a":5.41,"hist":9,"geo":10,"civ":7.5,"islam":4},"2":{"g":[4,10,10,10,6,5,10,8,5,7,null,null,10,4],"a":7.42,"hist":6,"geo":2,"civ":5,"islam":2}}},"G191068973":{"n":"البوعناني ايمن","c":"6APG-2","phases":{"1":{"g":[5,5,7.5,5,0,4,10,7,8,10,7,4,1,6],"a":5.68,"hist":4,"geo":8,"civ":7,"islam":3},"2":{"g":[3,10,5,6,5,5,6,8,10,10,null,null,7.75,4],"a":6.65,"hist":3,"geo":5,"civ":8,"islam":7}}},"G191123629":{"n":"بلفحيلية رضى","c":"6APG-2","phases":{"1":{"g":[2,0,2.5,2,0,5,2.5,7,4,4,0,5,3.75,0],"a":2.7,"hist":5,"geo":6,"civ":3,"islam":2},"2":{"g":[3,10,6,8,10,7,10,8,8,4,null,null,9,6.5],"a":7.46,"hist":1,"geo":1,"civ":5,"islam":4.5}}},"G192020609":{"n":"شاقو سلمى","c":"6APG-2","phases":{"1":{"g":[3,2.5,2.5,6,8,4,2.5,7,8,4,4,5,8,0],"a":4.61,"hist":2,"geo":4,"civ":8,"islam":6},"2":{"g":[5,10,10,8,10,7,8,6,6,4,null,null,8.25,7],"a":7.44,"hist":1,"geo":4,"civ":6,"islam":7}}},"G192086633":{"n":"المساوي مريم","c":"6APG-2","phases":{"1":{"g":[6,2.5,7.5,5,8,4,7,10,10,4,9.5,7,7,8],"a":6.82,"hist":10,"geo":10,"civ":10,"islam":9},"2":{"g":[9,10,10,10,10,6,10,10,10,10,null,null,10,7.5],"a":9.38,"hist":10,"geo":9,"civ":8,"islam":9.5}}},"G193020606":{"n":"الناجي سعد","c":"6APG-2","phases":{"1":{"g":[4,10,10,8,5,5,7,3,8,4,6,6,4.5,0],"a":5.75,"hist":8,"geo":4,"civ":8,"islam":5},"2":{"g":[6,10,10,10,10,7,10,10,8,10,null,null,9,3],"a":8.58,"hist":8.5,"geo":5,"civ":9,"islam":6.5}}},"G193112777":{"n":"الفائق مراد","c":"6APG-2","phases":{"1":{"g":[7,2.5,0,4,2,4,7,7,6,4,5,5,0,3.25],"a":4.05,"hist":8,"geo":4,"civ":9,"islam":4},"2":{"g":[7,10,10,6,6,3,10,8,10,7,null,null,10,3],"a":7.5,"hist":6,"geo":5,"civ":5,"islam":3}}},"G199020638":{"n":"الجاوي فهد","c":"6APG-2","phases":{"1":{"g":[4,5,5,4,3,3,5.5,7,8,4,2,3,0.25,0],"a":3.84,"hist":5,"geo":3.5,"civ":6,"islam":1},"2":{"g":[6,10,10,8,4,5,10,8,4,6,null,null,7.75,5.5],"a":7.02,"hist":1,"geo":5,"civ":5,"islam":3.5}}},"G201042028":{"n":"القباي نسرين","c":"6APG-2","phases":{"1":{"g":[5,2.5,10,6,4,8,7,3,4,10,8.5,4.5,5.5,0],"a":5.57,"hist":2,"geo":7,"civ":6,"islam":4},"2":{"g":[7,10,10,5,10,10,10,10,3,4,null,null,9.75,7],"a":7.98,"hist":6,"geo":1,"civ":6,"islam":4.5}}},"G201087057":{"n":"الفائق صفاء","c":"6APG-2","phases":{"1":{"g":[5,5,10,7,6,5,10,7,6,10,5.5,6,2,2],"a":6.18,"hist":9,"geo":9.5,"civ":7.5,"islam":7},"2":{"g":[8,10,10,8,5,7,10,9,6,10,null,null,8.75,6.5],"a":8.19,"hist":1,"geo":2,"civ":5,"islam":9}}},"G201150645":{"n":"الإدريسي عماد","c":"6APG-2","phases":{"1":{"g":[5,10,7.5,8,3,9,5.5,10,10,4,8.5,7,6,5],"a":7.04,"hist":7,"geo":7,"civ":9.5,"islam":9},"2":{"g":[6,10,10,10,9,8,10,8,8,7,null,null,9,7],"a":8.5,"hist":10,"geo":8,"civ":6,"islam":9.5}}},"G202006106":{"n":"المركة ريان","c":"6APG-2","phases":{"1":{"g":[2,7.5,5,5,0,4,3,7,8,10,9.5,6,4.25,0],"a":5.09,"hist":6,"geo":7.5,"civ":7.5,"islam":6.5},"2":{"g":[7,10,10,10,10,6,10,10,5,10,null,null,8.75,4.5],"a":8.44,"hist":8.5,"geo":8,"civ":5,"islam":4.5}}},"G202006858":{"n":"الناصح حمزة","c":"6APG-2","phases":{"1":{"g":[2,5,5,5,1,5,5.5,7,6,4,4,4,1.75,0],"a":3.95,"hist":5,"geo":7.5,"civ":7,"islam":3},"2":{"g":[8,10,8,6,9,6,10,4,2,4,null,null,8.5,4.5],"a":6.67,"hist":8.5,"geo":1,"civ":5,"islam":6.5}}},"G202028861":{"n":"محراش صهيب","c":"6APG-2","phases":{"1":{"g":[7,7.5,5,10,10,10,7,7,10,10,9,10,8.25,8],"a":8.48,"hist":10,"geo":10,"civ":10,"islam":6.5},"2":{"g":[10,10,10,10,10,10,10,10,10,10,null,null,10,8.5],"a":9.88,"hist":10,"geo":8,"civ":9,"islam":9.5}}},"G202028868":{"n":"الصبح فاطمة الزهراء","c":"6APG-2","phases":{"1":{"g":[3,2.5,10,2,1,7,5.5,0,2,0,7,6.5,1.5,0],"a":3.43,"hist":5,"geo":6,"civ":6,"islam":1},"2":{"g":[7,10,8,10,9,6,10,10,9,4,null,null,9.25,8],"a":8.35,"hist":1,"geo":1,"civ":2,"islam":4.5}}},"G202028869":{"n":"بوشان نور الهدى","c":"6APG-2","phases":{"1":{"g":[7,5,10,10,5,9,2.5,7,8,4,7,7.5,8,5],"a":6.79,"hist":10,"geo":9,"civ":9.5,"islam":8},"2":{"g":[9,10,10,10,10,9,10,10,9,10,null,null,10,8],"a":9.58,"hist":10,"geo":8,"civ":9,"islam":9.5}}},"G202028872":{"n":"القرقوري زياد","c":"6APG-2","phases":{"1":{"g":[4,2.5,7.5,5,5,4,10,10,10,0,6,5,5,5],"a":5.64,"hist":8,"geo":10,"civ":7,"islam":7},"2":{"g":[8,10,8,6,9,5,10,8,2,4,null,null,9,4.5],"a":6.96,"hist":10,"geo":8,"civ":3,"islam":8.5}}},"G202028880":{"n":"العكاري رحاب","c":"6APG-2","phases":{"1":{"g":[5,7.5,10,9,4,6,7,7,8,4,7,7.5,8,7],"a":6.93,"hist":9,"geo":9,"civ":10,"islam":8},"2":{"g":[8,10,10,10,10,9,10,10,10,10,null,null,10,8],"a":9.58,"hist":10,"geo":8,"civ":8,"islam":10}}},"G202045529":{"n":"الناصري معاد","c":"6APG-2","phases":{"1":{"g":[4,2.5,7.5,3,0,4,2.5,4,6,0,4.5,4,2.5,0],"a":3.18,"hist":2,"geo":8,"civ":7,"islam":1},"2":{"g":[5,10,10,6,4,4,10,4,4,5,null,null,8,3],"a":6.08,"hist":6,"geo":1,"civ":5,"islam":5.5}}},"G202064340":{"n":"الفخري خديجة","c":"6APG-2","phases":{"1":{"g":[9,2.5,5,4,6,6,2.5,7,8,4,5.5,5,6.5,0],"a":5.07,"hist":8,"geo":2,"civ":4,"islam":6},"2":{"g":[8,10,10,6,10,6,10,10,6,10,null,null,9,6.5],"a":8.46,"hist":6.5,"geo":5,"civ":3,"islam":8.5}}},"G203028886":{"n":"الفطواكي ريحانة","c":"6APG-2","phases":{"1":{"g":[9,7.5,10,7,8,7,8.5,7,10,4,8,9,9.75,8],"a":8.05,"hist":6,"geo":9,"civ":7.5,"islam":7},"2":{"g":[6,10,10,10,9,6,10,8,9,10,null,null,10,8],"a":8.83,"hist":10,"geo":8,"civ":9,"islam":9.5}}},"G203028888":{"n":"عفوالله امينة","c":"6APG-2","phases":{"1":{"g":[8,7.5,10,10,7,10,10,10,10,10,9.5,9,10,6],"a":9.07,"hist":10,"geo":10,"civ":10,"islam":10},"2":{"g":[9,10,10,10,10,10,10,10,10,10,null,null,10,9.5],"a":9.88,"hist":10,"geo":10,"civ":10,"islam":10}}},"G203028893":{"n":"زيان محمد","c":"6APG-2","phases":{"1":{"g":[4,7.5,7.5,8,2,6,10,7,4,4,8,9,4.5,0],"a":5.82,"hist":7.5,"geo":10,"civ":5,"islam":8},"2":{"g":[8,10,10,10,6,10,9,8,7,10,null,null,10,8],"a":8.83,"hist":10,"geo":7,"civ":9,"islam":7.5}}},"G203028899":{"n":"النائر مروة","c":"6APG-2","phases":{"1":{"g":[9,7.5,10,10,8,8,10,7,10,10,8,9.5,9.5,6],"a":8.75,"hist":8,"geo":9.5,"civ":9,"islam":9.5},"2":{"g":[8,10,10,10,10,7,10,10,10,10,null,null,9.5,8.5],"a":9.42,"hist":10,"geo":8,"civ":9.5,"islam":9}}},"G204054755":{"n":"اياس مروان","c":"6APG-2","phases":{"1":{"g":[6,7.5,10,8,8,6,10,10,10,4,5.5,6,6.5,2],"a":7.11,"hist":8,"geo":10,"civ":7.5,"islam":5},"2":{"g":[6,10,10,8,5,6,8,8,10,10,null,null,10,8.5],"a":8.29,"hist":10,"geo":10,"civ":6,"islam":8.5}}},"G207003378":{"n":"لحمادي إلياس","c":"6APG-2","phases":{"1":{"g":[5,2.5,10,3,0,3,10,7,8,4,4.5,5.5,1.75,0],"a":4.59,"hist":3.5,"geo":5,"civ":6.5,"islam":3.5},"2":{"g":[8,10,6,6,8,5,10,8,3,2,null,null,4.25,2.5],"a":6.06,"hist":8,"geo":1,"civ":2,"islam":5.5}}},"G208045490":{"n":"قرواش ايمان","c":"6APG-2","phases":{"1":{"g":[9,7.5,10,10,4,9,5.5,10,10,4,6.5,6,5,4],"a":7.18,"hist":8,"geo":9,"civ":9,"islam":6},"2":{"g":[10,10,10,10,10,8,10,10,10,10,null,null,9.5,8.5],"a":9.67,"hist":8.5,"geo":8,"civ":9,"islam":8.5}}},"G208054751":{"n":"ابوزايد محمد","c":"6APG-2","phases":{"1":{"g":[6,10,10,4,2,4,7,7,10,4,4,3.5,0.5,0],"a":5.14,"hist":4,"geo":8,"civ":7,"islam":4},"2":{"g":[8,10,9,6,4,5,10,10,6,4,null,null,9,3],"a":7,"hist":2,"geo":1,"civ":6,"islam":3}}},"G208064245":{"n":"البهي محمد","c":"6APG-2","phases":{"1":{"g":[7,10,10,8,4,4,5.5,10,10,4,7,6.5,7,0],"a":6.64,"hist":8,"geo":9,"civ":7.5,"islam":7},"2":{"g":[7,10,10,10,10,7,10,10,10,10,null,null,10,8.5],"a":9.38,"hist":10,"geo":8,"civ":8,"islam":9.5}}},"G209064244":{"n":"البهي فاطمة الزهراء","c":"6APG-2","phases":{"1":{"g":[5,7.5,0,4,2,4,7,7,10,10,8.75,8,7.5,8],"a":6.34,"hist":7.5,"geo":9.5,"civ":10,"islam":9.5},"2":{"g":[6,10,10,10,10,6,10,10,10,10,null,null,10,7.5],"a":9.12,"hist":10,"geo":8,"civ":8.5,"islam":10}}},"L209001972":{"n":"بنرمضان محمد أمين","c":"6APG-2","phases":{"1":{"g":[4,2.5,7.5,8,4,4,7,10,4,4,4,4,3,2],"a":4.86,"hist":3,"geo":6,"civ":7,"islam":2},"2":{"g":[6,10,8,7,9,6,10,10,7,10,null,null,7,5],"a":7.92,"hist":3.5,"geo":6,"civ":6,"islam":5}}}};
 
-// Determine available phases from DB
-const availPhases = [...new Set(Object.values(DB).flatMap(s => Object.keys(s.phases)))].sort();
-const multiPhase = availPhases.length > 1;
+const AP=[...new Set(Object.values(DB).flatMap(s=>Object.keys(s.phases)))].sort();
+const MP=AP.length>1;
 
-function go() {
-  const id = document.getElementById('mid').value.trim().toUpperCase();
-  const s = DB[id];
-  const errEl = document.getElementById('err');
-  const resEl = document.getElementById('result');
-  if (!s) {
-    errEl.classList.add('show');
-    resEl.classList.remove('show');
-    return;
-  }
-  errEl.classList.remove('show');
-  render(id, s);
-  resEl.classList.add('show');
-  setTimeout(() => resEl.scrollIntoView({behavior:'smooth', block:'start'}), 50);
+function fmt(v){
+  if(v===null||v===undefined)return'—';
+  const f=parseFloat(v);
+  if(isNaN(f))return'—';
+  return f%1===0?String(f):f.toFixed(2).replace(/0+$/,'').replace(/\.$/,'');
 }
-document.getElementById('mid').addEventListener('keydown', e => { if(e.key==='Enter') go(); });
+function fn(v){if(v===null||v===undefined)return null;const f=parseFloat(v);return isNaN(f)?null:f;}
+function gc(v){return v===null?'':v>=7?'ga':v>=5?'gb':'gc';}
+function ac(v){return v===null?'':v>=7?'abh':v>=5?'abm':'abl';}
 
-function fmt(v) {
-  if (v===null||v===undefined) return '—';
-  const f = parseFloat(v);
-  if (isNaN(f)) return '—';
-  return f % 1 === 0 ? String(f) : f.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
+function thC(){
+  if(!MP)return PFULL[parseInt(AP[0])-1];
+  return AP.map(p=>`<span class="pp ${PC[p-1]}">${PNAMES[p-1]}</span>`).join(' ');
 }
-function fmtN(v) {
-  if (v===null||v===undefined) return null;
-  const f = parseFloat(v);
-  return isNaN(f) ? null : f;
+function pCell(s,ex){
+  if(!MP){const v=fn(ex(s.phases[AP[0]]||{}));return`<td class="${gc(v)}" style="font-weight:700">${fmt(v)}</td>`;}
+  const pills=AP.map(p=>{const d=s.phases[p];const v=d?fn(ex(d)):null;return v===null?`<span class="pp ppe">—</span>`:`<span class="pp ${PC[p-1]} ${gc(v)}">${fmt(v)}</span>`;}).join(' ');
+  return`<td>${pills}</td>`;
 }
-function gc(v) {
-  if (v===null) return '';
-  return v>=7?'ga':v>=5?'gb':'gc';
-}
-function abCls(v) {
-  if (v===null) return '';
-  return v>=7?'ab-h':v>=5?'ab-m':'ab-l';
+function aCell(s,ex){
+  if(!MP){const v=fn(ex(s.phases[AP[0]]||{}));return`<span class="ab ${ac(v)}">${v!==null?v.toFixed(2):'—'} / 10</span>`;}
+  return AP.map(p=>{const d=s.phases[p];const v=d?fn(ex(d)):null;return`<span class="ab ${ac(v)}" style="font-size:.8rem;margin:2px">${PNAMES[p-1]}: ${v!==null?v.toFixed(2):'—'}</span>`;}).join(' ');
 }
 
-function phaseCell(s, extractor) {
-  if (!multiPhase) {
-    const p = availPhases[0];
-    const d = s.phases[p];
-    const v = d ? fmtN(extractor(d)) : null;
-    return `<td class="gv ${gc(v)}">${fmt(v)}</td>`;
-  }
-  const pills = availPhases.map(p => {
-    const d = s.phases[p];
-    const v = d ? fmtN(extractor(d)) : null;
-    if (v===null) return `<span class="pp pp-empty">—</span>`;
-    return `<span class="pp ${PC[parseInt(p)-1]} ${gc(v)}">${fmt(v)}</span>`;
-  }).join(' ');
-  return `<td>${pills}</td>`;
+function go(){
+  const id=document.getElementById('mid').value.trim().toUpperCase();
+  const s=DB[id];
+  const er=document.getElementById('err');
+  const re=document.getElementById('result');
+  if(!s){er.classList.add('show');re.classList.remove('show');return;}
+  er.classList.remove('show');
+  render(id,s);
+  re.classList.add('show');
+  setTimeout(()=>re.scrollIntoView({behavior:'smooth',block:'start'}),50);
 }
+document.getElementById('mid').addEventListener('keydown',e=>{if(e.key==='Enter')go();});
 
-function avgCell(s, extractor) {
-  if (!multiPhase) {
-    const p = availPhases[0];
-    const d = s.phases[p];
-    const v = d ? fmtN(extractor(d)) : null;
-    return `<span class="avg-badge ${abCls(v)}">${v!==null?v.toFixed(2):'—'} / 10</span>`;
-  }
-  return availPhases.map(p => {
-    const d = s.phases[p];
-    const v = d ? fmtN(extractor(d)) : null;
-    return `<span class="avg-badge ${abCls(v)}" style="font-size:.82rem;margin:2px">${PNAMES[p-1].replace('المرحلة','م')}: ${v!==null?v.toFixed(2):'—'}</span>`;
-  }).join(' ');
-}
+function render(id,s){
+  document.getElementById('rn').textContent=s.n;
+  document.getElementById('rc').textContent=s.c;
+  document.getElementById('rm').textContent=id;
 
-function thContent() {
-  if (!multiPhase) return PNAMES[parseInt(availPhases[0])-1];
-  return availPhases.map(p=>`<span class="pp ${PC[p-1]}">${PNAMES[p-1]}</span>`).join(' ');
-}
-
-function render(id, s) {
-  document.getElementById('rn').textContent = s.n;
-  document.getElementById('rc').textContent = s.c;
-  document.getElementById('rm').textContent = id;
-
-  // Phase tabs
-  const tabs = document.getElementById('ptabs');
-  tabs.innerHTML = '';
-  for (let p=1;p<=4;p++) {
-    const has = !!s.phases[String(p)];
-    tabs.innerHTML += `<div class="ptab ${has?'has':''}">
-      <span class="pt-num">${PNAMES[p-1].replace('المرحلة ','م')}</span>
-      <span class="pt-lbl">${has?'✔ متوفر':'⏳ قادم'}</span>
-    </div>`;
+  const tabs=document.getElementById('ptabs');
+  tabs.innerHTML='';
+  for(let p=1;p<=4;p++){
+    const has=!!s.phases[String(p)];
+    tabs.innerHTML+=`<div class="ptab ${has?'has':''}"><span class="pn">${PNAMES[p-1]}</span><span class="pl">${has?'✔ متوفر':'⏳ قادم'}</span></div>`;
   }
 
-  // Headers
-  const th = thContent();
-  ['th1','th2','th3'].forEach(id=>{ document.getElementById(id).innerHTML = th; });
+  const th=thC();
+  ['th1','th2','th3'].forEach(x=>{document.getElementById(x).innerHTML=th;});
 
-  // Arabic
-  const arBody = document.getElementById('ar-body');
-  arBody.innerHTML = LABELS.map((lbl,i) =>
-    `<tr><td class="code-col">${lbl}</td><td class="label-col">${DESC[lbl]}</td>${phaseCell(s, d=>d.g[i])}</tr>`
-  ).join('');
-  document.getElementById('ar-avg').innerHTML = avgCell(s, d=>d.a);
+  document.getElementById('arb').innerHTML=LABELS.map((l,i)=>
+    `<tr><td class="cc">${l}</td><td class="lc">${DESC[l]}</td>${pCell(s,d=>d.g[i])}</tr>`).join('');
+  document.getElementById('ara').innerHTML=aCell(s,d=>d.a);
 
-  // Soc
-  const socBody = document.getElementById('soc-body');
-  const socItems = [{c:'HIST',l:'التاريخ',k:'hist'},{c:'GEO',l:'الجغرافية',k:'geo'},{c:'CIV',l:'التربية المدنية',k:'civ'}];
-  socBody.innerHTML = socItems.map(({c,l,k}) =>
-    `<tr><td class="code-col">${c}</td><td class="label-col">${l}</td>${phaseCell(s, d=>d[k])}</tr>`
-  ).join('');
-  document.getElementById('soc-avg').innerHTML = avgCell(s, d => {
-    const vs = [d.hist,d.geo,d.civ].map(fmtN).filter(v=>v!==null);
-    return vs.length ? vs.reduce((a,b)=>a+b,0)/vs.length : null;
-  });
+  const si=[{c:'HIST',l:'التاريخ',k:'hist'},{c:'GEO',l:'الجغرافية',k:'geo'},{c:'CIV',l:'التربية المدنية',k:'civ'}];
+  document.getElementById('scb').innerHTML=si.map(({c,l,k})=>
+    `<tr><td class="cc">${c}</td><td class="lc">${l}</td>${pCell(s,d=>d[k])}</tr>`).join('');
+  document.getElementById('sca').innerHTML=aCell(s,d=>{const vs=[d.hist,d.geo,d.civ].map(fn).filter(v=>v!==null);return vs.length?vs.reduce((a,b)=>a+b,0)/vs.length:null;});
 
-  // Islam
-  document.getElementById('isl-body').innerHTML =
-    `<tr><td class="code-col">ISLAM</td><td class="label-col">التربية الإسلامية</td>${phaseCell(s, d=>d.islam)}</tr>`;
-  document.getElementById('isl-avg').innerHTML = avgCell(s, d=>d.islam);
+  document.getElementById('isb').innerHTML=`<tr><td class="cc">ISLAM</td><td class="lc">التربية الإسلامية</td>${pCell(s,d=>d.islam)}</tr>`;
+  document.getElementById('isa').innerHTML=aCell(s,d=>d.islam);
 
-  // Advice — based on latest available phase
-  const lastP = availPhases[availPhases.length-1];
-  const lastD = s.phases[lastP];
-  const avg = lastD ? fmtN(lastD.a) : null;
-  const adv = document.getElementById('adv');
-  if (avg===null) { adv.innerHTML=''; return; }
-  if (avg>=8) {
-    adv.className='advice advice-h';
-    adv.innerHTML=`<strong>🌟 أداء متميز جداً — تهانينا!</strong><ul>
-      <li>استمر في هذا المسار الممتاز وتوسع في القراءة الحرة.</li>
-      <li>احرص على الحفاظ على هذا المستوى في المراحل القادمة.</li>
-      <li>يمكنك الاستفادة من وقت الفراغ لتنمية رصيدك المعرفي.</li></ul>`;
-  } else if (avg>=5) {
-    adv.className='advice advice-m';
-    adv.innerHTML=`<strong>📈 نتيجة متوسطة — هناك مجال للتحسن</strong><ul>
-      <li>ركز على مكونات الإنتاج الكتابي والظواهر اللغوية.</li>
-      <li>خصص 15 دقيقة يومياً للقراءة لتقوية فهم المقروء.</li>
-      <li>راجع دروس التعبير الشفهي وتدرب على المحادثة.</li></ul>`;
-  } else {
-    adv.className='advice advice-l';
-    adv.innerHTML=`<strong>⚠️ تحتاج إلى جهد مضاعف في المراحل القادمة</strong><ul>
-      <li>التركيز على أساسيات القراءة وقواعد الإملاء يومياً.</li>
-      <li>مراجعة دروس قواعد اللغة العربية مع الأستاذ.</li>
-      <li>حضور جلسات الدعم والتقوية بانتظام.</li></ul>`;
-  }
+  const ld=s.phases[AP[AP.length-1]];
+  const av=ld?fn(ld.a):null;
+  const adv=document.getElementById('adv');
+  if(av===null){adv.innerHTML='';return;}
+  if(av>=8){adv.className='adv advh';adv.innerHTML=`<strong>🌟 أداء متميز جداً — تهانينا!</strong><ul><li>استمر في هذا المسار الممتاز وتوسع في القراءة الحرة.</li><li>احرص على الحفاظ على هذا المستوى في المراحل القادمة.</li><li>يمكنك الاستفادة من وقت الفراغ لتنمية رصيدك المعرفي.</li></ul>`;}
+  else if(av>=5){adv.className='adv advm';adv.innerHTML=`<strong>📈 نتيجة متوسطة — هناك مجال للتحسن</strong><ul><li>ركز على مكونات الإنتاج الكتابي والظواهر اللغوية.</li><li>خصص 15 دقيقة يومياً للقراءة لتقوية فهم المقروء.</li><li>راجع دروس التعبير الشفهي وتدرب على المحادثة.</li></ul>`;}
+  else{adv.className='adv advl';adv.innerHTML=`<strong>⚠️ تحتاج إلى جهد مضاعف في المراحل القادمة</strong><ul><li>التركيز على أساسيات القراءة وقواعد الإملاء يومياً.</li><li>مراجعة دروس قواعد اللغة العربية مع الأستاذ.</li><li>حضور جلسات الدعم والتقوية بانتظام.</li></ul>`;}
 }
 </script>
 </body>
